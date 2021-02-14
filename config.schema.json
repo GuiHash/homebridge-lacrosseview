@@ -1,0 +1,41 @@
+{
+  "pluginAlias": "LaCrosseView",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "title": "Email",
+        "type": "string",
+        "format": "email",
+        "required": true
+      },
+      "password": {
+        "title": "Password",
+        "type": "string",
+        "required": true
+      },
+      "pollingInterval": {
+        "title": "Polling Interval (seconds)",
+        "type": "integer",
+        "required": true,
+        "default": 200,
+        "minimum": 30,
+        "description": "How often to check LaCrossView API",
+        "placeholder": "200"
+      }
+    }
+  },
+  "layout": [
+    {
+      "type": "fieldset",
+      "title": "Authentication (Required)",
+      "description": "Connect to LaCrossView APi",
+      "expandable": true,
+      "expanded": true,
+      "items": ["email", "password"]
+    },
+    "pollingInterval"
+  ]
+}
