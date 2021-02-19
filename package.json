@@ -3,7 +3,7 @@
   "displayName": "Homebridge La Crosse View",
   "version": "1.0.0",
   "description": "Homebridge Plugin providing La Crosse View sensors support",
-  "main": "buld/index.js",
+  "main": "build/index.js",
   "files": [
     "build",
     "config.schema.json"
@@ -37,9 +37,9 @@
     "got": "^11.8.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.27",
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "@typescript-eslint/parser": "^4.15.0",
+    "@types/node": "^14.14.30",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",

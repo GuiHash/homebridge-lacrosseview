@@ -43,24 +43,32 @@ export class ExamplePlatformAccessory {
 
     this.updateDataSensors()
     this.log.debug(`[%s] fireCharacteristicUpdateInterval [%s]`, accessory.displayName, platform.config.pollingInterval)
-    setInterval(async () => {
-      await this.updateDataSensors()
+    setInterval(() => {
+      this.updateDataSensors()
     }, platform.config.pollingInterval * 1000)
   }
 
   async updateDataSensors() {
-    this.log.debug(`[%s] lacrosse.getWeatherData(%s)`, this.accessory.displayName, this.accessory.context.device)
+    try {
+      this.log.debug(`[%s] lacrosse.getWeatherData(%s)`, this.accessory.displayName, this.accessory.context.device)
 
-    this.service.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
-    this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
-    const { humidity, temperature } = await this.lacrosse.getDeviceWeatherData(this.accessory.context.device)
+      this.service.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
+      this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
+      const { humidity, temperature } = await this.lacrosse.getDeviceWeatherData(this.accessory.context.device)
 
-    this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.CurrentRelativeHumidity, humidity)
-    this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 0)
-    this.log.debug(`[%s] updateCharacteristic [%s] Humidity`, this.accessory.displayName, humidity)
+      if (humidity) {
+        this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.CurrentRelativeHumidity, humidity)
+        this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 0)
+        this.log.debug(`[%s] updateCharacteristic [%s] Humidity`, this.accessory.displayName, humidity)
+      }
 
-    this.service.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, temperature)
-    this.service.updateCharacteristic(this.platform.Characteristic.StatusActive, 0)
-    this.log.debug(`[%s] updateCharacteristic [%s] Temperature`, this.accessory.displayName, temperature)
+      if (temperature) {
+        this.service.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, temperature)
+        this.service.updateCharacteristic(this.platform.Characteristic.StatusActive, 0)
+        this.log.debug(`[%s] updateCharacteristic [%s] Temperature`, this.accessory.displayName, temperature)
+      }
+    } catch (e) {
+      this.log.error('[%S] %S', this.accessory.displayName, e)
+    }
   }
 }

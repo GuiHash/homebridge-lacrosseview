@@ -93,11 +93,6 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     this.accessories.push(accessory)
   }
 
-  /**
-   * This is an example method showing how to register discovered accessories.
-   * Accessories must only be registered once, previously created accessories
-   * must not be registered again to prevent "duplicate UUID" errors.
-   */
   async discoverDevices(initial: boolean) {
     try {
       const devices = await this.lacrosse.getDevices()
@@ -126,12 +121,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
             )
             existingAccessory.displayName = device.name
           }
-          // if you need to update the accessory.context then you should run `api.updatePlatformAccessories`. eg.:
-          // existingAccessory.context.device = device;
-          // this.api.updatePlatformAccessories([existingAccessory]);
 
-          // create the accessory handler for the restored accessory
-          // this is imported from `platformAccessory.ts`
           new ExamplePlatformAccessory(this, existingAccessory)
 
           // update accessory cache with any changes to the accessory details and information
