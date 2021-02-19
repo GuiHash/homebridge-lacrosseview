@@ -152,6 +152,8 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
           return accessory.UUID === uuid
         })
 
+        console.warn('gui')
+
         if (!existingDevice) {
           // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
           // remove platform accessories when no longer present
