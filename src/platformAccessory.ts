@@ -68,7 +68,7 @@ export class ExamplePlatformAccessory {
         this.log.debug(`[%s] updateCharacteristic [%s] Temperature`, this.accessory.displayName, temperature)
       }
     } catch (e) {
-      this.log.error('[%S] %S', this.accessory.displayName, e)
+      this.log.error('[%s] %s', this.accessory.displayName, e)
     }
   }
 }

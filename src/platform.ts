@@ -32,7 +32,7 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
     ...config,
     password,
     email,
-    pollingInterval: (config.pollingInterval as number) || 200,
+    pollingInterval: config.pollingInterval || 200,
   }
 }
 
@@ -56,7 +56,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     try {
       this.config = generateConfig(config)
       this.lacrosse = new LaCrosseAPI(this.config.email, this.config.password)
-      this.log.debug('Finished initializing platform: %s', this.config.name)
+      this.log.debug('Finished initializing platform: %s', this.config.platform)
 
       // When this event is fired it means Homebridge has restored all cached accessories from disk.
       // Dynamic Platform plugins should only register new accessories after this event was fired,
@@ -71,7 +71,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
         }, DISCOVER_DEVICES_INTERVAL)
       })
     } catch (e) {
-      this.lacrosse = {} as LaCrosseAPI
+      this.lacrosse = new LaCrosseAPI('', '')
       this.config = config as LaCrosseViewConfig
       this.log.error(e.message)
     }
@@ -88,6 +88,8 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
       accessory.context.device.id,
       accessory.UUID,
     )
+
+    new ExamplePlatformAccessory(this, accessory)
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
     this.accessories.push(accessory)
@@ -122,8 +124,6 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
             existingAccessory.displayName = device.name
           }
 
-          new ExamplePlatformAccessory(this, existingAccessory)
-
           // update accessory cache with any changes to the accessory details and information
           this.api.updatePlatformAccessories([existingAccessory])
         } else {
@@ -151,8 +151,6 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
           const uuid = this.api.hap.uuid.generate(device.id)
           return accessory.UUID === uuid
         })
-
-        console.warn('gui')
 
         if (!existingDevice) {
           // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
