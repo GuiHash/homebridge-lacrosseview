@@ -1,6 +1,6 @@
 # Homebridge La Crosse View
 
-[![npm](https://badgen.net/npm/v/homebridge-lacrosseview) ![npm](https://badgen.net/npm/dt/homebridge-lacrosseview)](https://www.npmjs.com/package/homebridge-camera-ffmpeg)
+[![npm](https://badgen.net/npm/v/homebridge-lacrosseview) ![npm](https://badgen.net/npm/dt/homebridge-lacrosseview)](https://www.npmjs.com/package/homebridge-lacrosseview)
 
 [Homebridge](https://homebridge.io) Plugin Providing La Crosse View ([iOS](https://apps.apple.com/app/la-crosse-view/id1006925791), [android](https://play.google.com/store/apps/details?id=com.lacrosseview.app)) sensors support
 
