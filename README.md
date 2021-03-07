@@ -27,7 +27,7 @@ Before installing this plugin, you should install Homebridge using the [official
 ### Manual Installation
 
 1. Install this plugin using: `sudo npm install -g homebridge-lacrosseview --unsafe-perm`.
-2. Edit `config.json` manually to add your cameras. See below for instructions on that.
+2. Edit `config.json` manually to add your La Crosse View credentials. See below for instructions on that.
 
 ## Configuration
 
