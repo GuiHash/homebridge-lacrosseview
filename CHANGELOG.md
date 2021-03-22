@@ -1,3 +1,20 @@
+### [1.0.1](https://github.com/GuiHash/homebridge-lacrosseview/compare/v1.0.0...v1.0.1) (2021-03-22)
+
+
+### Bug Fixes
+
+* accessories added multiple times ([#7](https://github.com/GuiHash/homebridge-lacrosseview/issues/7)) ([de2ad79](https://github.com/GuiHash/homebridge-lacrosseview/commit/de2ad798227773d89eeadc0606f1a7c33935a973))
+
+
+### Documentations
+
+* wrong manual instruction ([efd4d38](https://github.com/GuiHash/homebridge-lacrosseview/commit/efd4d38f30b8220591a1af93315ecd72e86fbf8d))
+
+
+### Chore
+
+* bump deps ([#8](https://github.com/GuiHash/homebridge-lacrosseview/issues/8)) ([2b28e53](https://github.com/GuiHash/homebridge-lacrosseview/commit/2b28e53ec82c1ea081bedcfe891340fa8e65e5bb))
+
 ## 1.0.0 (2021-03-07)
 
 
