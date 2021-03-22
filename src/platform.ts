@@ -9,7 +9,7 @@ import {
 } from 'homebridge'
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings'
-import { ExamplePlatformAccessory } from './platformAccessory'
+import { Accessory } from './platformAccessory'
 
 import LaCrosseAPI from './lacrosse'
 
@@ -36,7 +36,7 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
   }
 }
 
-const DISCOVER_DEVICES_INTERVAL = 10 * 60 * 1000 // every 10 mminutes
+const DISCOVER_DEVICES_INTERVAL = 10 * 60 * 1000 // every 10 minutes
 
 /**
  * HomebridgePlatform
@@ -89,7 +89,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
       accessory.UUID,
     )
 
-    new ExamplePlatformAccessory(this, accessory)
+    new Accessory(this, accessory)
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
     this.accessories.push(accessory)
@@ -139,10 +139,11 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
           // create the accessory handler for the newly create accessory
           // this is imported from `platformAccessory.ts`
-          new ExamplePlatformAccessory(this, accessory)
+          new Accessory(this, accessory)
 
           // link the accessory to your platform
           this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory])
+          this.accessories.push(accessory)
         }
       }
 
