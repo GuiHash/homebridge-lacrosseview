@@ -112,7 +112,6 @@ export default class LaCrosseAPI {
       returnSecureToken: true,
     }
 
-    // TODO manage 400 errors
     const { idToken: value, expiresIn }: ResponseLogin = await fetch(LACROSSE_LOGIN_URL, {
       json,
       method: 'POST',

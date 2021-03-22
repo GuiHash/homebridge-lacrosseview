@@ -8,7 +8,7 @@ import { LaCrosseViewPlatform } from './platform'
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
-export class ExamplePlatformAccessory {
+export class Accessory {
   private service: Service
   private humiditySensorService: Service
   private lacrosse: LaCrosseAPI
