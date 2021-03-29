@@ -3,7 +3,7 @@
 
 ### Features
 
-* add fakegato history for elegato eve app ([#12](https://github.com/GuiHash/homebridge-lacrosseview/issues/12)) ([c11397c](https://github.com/GuiHash/homebridge-lacrosseview/commit/c11397c1c3944f41f56c296564f06e9b4aa8f2d2))
+* add fakegato history for elgato eve app ([#12](https://github.com/GuiHash/homebridge-lacrosseview/issues/12)) ([c11397c](https://github.com/GuiHash/homebridge-lacrosseview/commit/c11397c1c3944f41f56c296564f06e9b4aa8f2d2))
 
 
 ### Bug Fixes

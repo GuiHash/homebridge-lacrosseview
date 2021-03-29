@@ -50,8 +50,8 @@
     "pollingInterval",
     {
       "type": "fieldset",
-      "title": "Elegato Eve",
-      "description": "Send history to Elegato Eve App",
+      "title": "Elgato Eve",
+      "description": "Send history to Elgato Eve App",
       "expandable": true,
       "expanded": false,
       "items": ["fakeGatoEnabled", "fakeGatoStoragePath"]
