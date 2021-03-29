@@ -1,3 +1,21 @@
+## [1.1.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v1.0.1...v1.1.0) (2021-03-29)
+
+
+### Features
+
+* add fakegato history for elegato eve app ([#12](https://github.com/GuiHash/homebridge-lacrosseview/issues/12)) ([c11397c](https://github.com/GuiHash/homebridge-lacrosseview/commit/c11397c1c3944f41f56c296564f06e9b4aa8f2d2))
+
+
+### Bug Fixes
+
+* create only necessary service on accessories ([#13](https://github.com/GuiHash/homebridge-lacrosseview/issues/13)) ([264dce6](https://github.com/GuiHash/homebridge-lacrosseview/commit/264dce630f77ec55df96496748be16616edad022))
+* sensors should be always active except when an error occured ([#11](https://github.com/GuiHash/homebridge-lacrosseview/issues/11)) ([1727553](https://github.com/GuiHash/homebridge-lacrosseview/commit/1727553c25833221ed646a9273fe826162b3894b))
+
+
+### Documentations
+
+* error default fakeGatoStoragePath in readme ([eb19ffd](https://github.com/GuiHash/homebridge-lacrosseview/commit/eb19ffd37bbe35ad354f06b0d888a4bd316e7201))
+
 ### [1.0.1](https://github.com/GuiHash/homebridge-lacrosseview/compare/v1.0.0...v1.0.1) (2021-03-22)
 
 
