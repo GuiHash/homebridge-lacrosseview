@@ -39,7 +39,8 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
   "email": "your-la-crossse-view@email.com",
   "password": "your-la-crosse-view-password",
 
-  "pollingInterval": 200
+  "pollingInterval": 200,
+  "fakeGatoEnabled": false,
 }]
 ```
 
@@ -47,6 +48,29 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
 - `email`: _(Required)_ Your La Crosse View application email
 - `password`: _(Required)_ Your La Crosse View application password
 - `pollingInterval`: Interval in seconds to update data _(Default to 200)_
+- `fakeGatoEnabled`: If historical data should be reported to the Elgato Eve App _(Default to 200) 
+- `fakeGatoStoragePath`: Custom path where to save fakegato history
+
+## Elgato Eve
+
+This plugin has support for adding historical data to the [Elgato Eve App](https://itunes.apple.com/us/app/elgato-eve/id917695792) by using the excellent module [fakegato-history](https://github.com/simont77/fakegato-history).
+
+To enable the Elgato Eve feature set `fakeGatoEnabled` to `true` in `config.json`
+
+```json
+{
+  "fakeGatoEnabled": true
+}
+```
+
+[fakegato-history](https://github.com/simont77/fakegato-history) caches historical values into a json-file.
+Usually located in `/var/lib/homebridge` or `~/.homebridge`. To customise this one can set `fakeGatoStoragePath` to the desired path:
+
+```json
+{
+  "fakeGatoStoragePath": "/tmp/"
+}
+```
 
 ## Acknowledgements
 

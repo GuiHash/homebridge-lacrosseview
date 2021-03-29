@@ -7,6 +7,7 @@ import {
   Service,
   Characteristic,
 } from 'homebridge'
+import fakegato from 'fakegato-history'
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings'
 import { ExamplePlatformAccessory } from './platformAccessory'
@@ -17,22 +18,30 @@ interface LaCrosseViewConfig extends PlatformConfig {
   password: string
   email: string
   pollingInterval: number
+  fakeGatoEnabled: boolean
+  fakeGatoStoragePath?: string
 }
 
 function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
-  const password = config.password as string
-  const email = config.email as string
+  const password = config.password
+  const email = config.email
+  const fakeGatoEnabled = config.fakeGatoEnabled
+  const fakeGatoStoragePath = config.fakeGatoStoragePath
+
   if (!email || !password) {
     throw new Error('Missing password or email, please configure your config.json')
   }
   if (config.pollingInterval && typeof config.pollingInterval !== 'number') {
     throw new Error('pollingInterval must be a number in your config.json')
   }
+
   return {
     ...config,
-    password,
-    email,
+    password: String(password),
+    email: String(email),
     pollingInterval: config.pollingInterval || 200,
+    fakeGatoEnabled: fakeGatoEnabled ? Boolean(fakeGatoEnabled) : false,
+    fakeGatoStoragePath: fakeGatoStoragePath ? String(fakeGatoStoragePath) : undefined,
   }
 }
 
@@ -48,6 +57,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic
   public readonly lacrosse: LaCrosseAPI
   public readonly config: LaCrosseViewConfig
+  public readonly FakeGatoHistoryService
 
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = []
@@ -55,6 +65,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
   constructor(public readonly log: Logger, config: PlatformConfig, public readonly api: API) {
     try {
       this.config = generateConfig(config)
+      this.FakeGatoHistoryService = fakegato(this.api)
       this.lacrosse = new LaCrosseAPI(this.config.email, this.config.password)
       this.log.debug('Finished initializing platform: %s', this.config.platform)
 
