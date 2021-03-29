@@ -48,8 +48,8 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
 - `email`: _(Required)_ Your La Crosse View application email
 - `password`: _(Required)_ Your La Crosse View application password
 - `pollingInterval`: Interval in seconds to update data _(Default to 200)_
-- `fakeGatoEnabled`: If historical data should be reported to the Elgato Eve App _(Default to 200) 
-- `fakeGatoStoragePath`: Custom path where to save fakegato history
+- `fakeGatoEnabled`: If historical data should be reported to the Elgato Eve App _(Default to false)_
+- `fakeGatoStoragePath`: Custom path where to save fakegato history _(Default to homebridge user path)_
 
 ## Elgato Eve
 
