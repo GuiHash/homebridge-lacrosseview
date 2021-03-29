@@ -11,6 +11,7 @@ import { LaCrosseViewPlatform } from './platform'
 export class Accessory {
   private service: Service
   private humiditySensorService: Service
+  private fakeGatoHistoryService?
   private lacrosse: LaCrosseAPI
   private log: Logger
 
@@ -18,12 +19,13 @@ export class Accessory {
     this.lacrosse = platform.lacrosse
     this.log = platform.log
 
+    const serialNumber = accessory.context?.device.sensor.serial
     // set accessory information
     accessory
       .getService(platform.Service.AccessoryInformation)!
       .setCharacteristic(platform.Characteristic.Manufacturer, 'LA CROSSE TECHNOLOGY')
       .setCharacteristic(platform.Characteristic.Model, accessory.context?.device.sensor.type.name)
-      .setCharacteristic(platform.Characteristic.SerialNumber, accessory.context?.device.sensor.serial)
+      .setCharacteristic(platform.Characteristic.SerialNumber, serialNumber)
 
     // set service temperature
     this.service =
@@ -37,6 +39,15 @@ export class Accessory {
     this.humiditySensorService =
       accessory.getService(platform.Service.HumiditySensor) ||
       this.accessory.addService(platform.Service.HumiditySensor)
+
+    if (platform.config.fakeGatoEnabled) {
+      this.fakeGatoHistoryService = new this.platform.FakeGatoHistoryService('weather', accessory, {
+        filename: `fakegato-history_${serialNumber}.json`,
+        log: this.log,
+        path: platform.config.fakeGatoStoragePath,
+        storage: 'fs',
+      })
+    }
 
     this.humiditySensorService.setCharacteristic(platform.Characteristic.Name, accessory.displayName)
     this.humiditySensorService.setCharacteristic(platform.Characteristic.StatusActive, 0)
@@ -64,6 +75,14 @@ export class Accessory {
         this.service.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
         this.service.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, temperature)
         this.log.debug(`[%s] updateCharacteristic [%s] Temperature`, this.accessory.displayName, temperature)
+      }
+
+      if (this.fakeGatoHistoryService && (humidity || temperature)) {
+        this.fakeGatoHistoryService.addEntry({
+          time: new Date().getTime() / 1000,
+          temp: temperature,
+          humidity,
+        })
       }
     } catch (e) {
       this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 0)

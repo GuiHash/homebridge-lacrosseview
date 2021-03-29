@@ -24,6 +24,17 @@
         "minimum": 30,
         "description": "How often to check LaCrossView API",
         "placeholder": "200"
+      },
+      "fakeGatoEnabled": {
+        "title": "Enable FakeGato",
+        "type": "boolean",
+        "default": false,
+        "description": "Enable to send historical data to the Elgato Eve app."
+      },
+      "fakeGatoStoragePath": {
+        "title": "FakeGato Storage Path",
+        "type": "string",
+        "description": "Specify a custom path to save FakeGato history."
       }
     }
   },
@@ -36,6 +47,14 @@
       "expanded": true,
       "items": ["email", "password"]
     },
-    "pollingInterval"
+    "pollingInterval",
+    {
+      "type": "fieldset",
+      "title": "Elegato Eve",
+      "description": "Send history to Elegato Eve App",
+      "expandable": true,
+      "expanded": false,
+      "items": ["fakeGatoEnabled", "fakeGatoStoragePath"]
+    }
   ]
 }
