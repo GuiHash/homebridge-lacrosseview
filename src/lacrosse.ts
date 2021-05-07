@@ -136,15 +136,16 @@ export default class LaCrosseAPI {
     if (!locations) {
       locations = await this.getLocations()
     }
+
+    const result: Device[] = []
     for (const location of locations) {
       const url = LACROSSE_DEVICES_URL.replace('%ID%', location.id)
       const body: ResponseData<Device> = await fetch(url, undefined, this.token.value)
 
-      // TODO manage multiple locations ?
-      return body.items
+      result.push(...body.items)
     }
 
-    return []
+    return result
   }
 
   async getDeviceWeatherData(device: Device): Promise<DeviceWeatherData> {
