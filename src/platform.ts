@@ -12,12 +12,14 @@ import fakegato from 'fakegato-history'
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings'
 import { Accessory } from './platformAccessory'
 
-import LaCrosseAPI from './lacrosse'
+import LaCrosseAPI, { Device, Location } from './lacrosse'
 
 interface LaCrosseViewConfig extends PlatformConfig {
   password: string
   email: string
   pollingInterval: number
+  devicesToExclude: string[]
+  locationsToInclude: string[]
   fakeGatoEnabled: boolean
   fakeGatoStoragePath?: string
 }
@@ -40,9 +42,15 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
     password: String(password),
     email: String(email),
     pollingInterval: config.pollingInterval || 200,
+    devicesToExclude: (config.devicesToExclude || []).filter(filterEmpties),
+    locationsToInclude: (config.locationsToInclude || []).filter(filterEmpties),
     fakeGatoEnabled: fakeGatoEnabled ? Boolean(fakeGatoEnabled) : false,
     fakeGatoStoragePath: fakeGatoStoragePath ? String(fakeGatoStoragePath) : undefined,
   }
+}
+
+function filterEmpties(value: string) {
+  return value && value.trim().length > 0
 }
 
 const DISCOVER_DEVICES_INTERVAL = 10 * 60 * 1000 // every 10 minutes
@@ -100,6 +108,16 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
       accessory.UUID,
     )
 
+    if (!this.shouldIncludeDevice(accessory.context.device)) {
+      this.log.info(
+        `Excluding existing device excluded by configuration: [%s] %s %s`,
+        accessory.displayName,
+        accessory.context.device.id,
+        accessory.UUID,
+      )
+      return
+    }
+
     new Accessory(this, accessory)
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
@@ -108,7 +126,30 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
   async discoverDevices(initial: boolean) {
     try {
-      const devices = await this.lacrosse.getDevices()
+      const allLocations = await this.lacrosse.getLocations()
+      const locations = allLocations.filter(location => {
+        if (initial) {
+          this.log.info('Location: [%s] id [%s]', location.name, location.id)
+        }
+        if (!this.shouldIncludeLocation(location)) {
+          this.log.debug(
+            `Ignoring discovered location excluded by configuration: [%s] id [%s]`,
+            location.name,
+            location.id,
+          )
+          return false
+        }
+        return true
+      })
+
+      const allDevices = await this.lacrosse.getDevices(locations)
+      const devices = allDevices.filter(device => {
+        if (!this.shouldIncludeDevice(device)) {
+          this.log.debug(`Ignoring discovered device excluded by configuration: [%s] %s`, device.name, device.id)
+          return false
+        }
+        return true
+      })
 
       for (const device of devices) {
         const uuid = this.api.hap.uuid.generate(device.id)
@@ -116,7 +157,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
         if (initial || !existingAccessory) {
           this.log.info('New Device Online: [%s] sensor [%s]', device.name, device.id)
-          this.log.info('Adding: [%s] sensor [%s]', device.name, device.id)
+            this.log.info('Adding: [%s] sensor [%s]', device.name, device.id)
         }
         if (existingAccessory) {
           // the accessory already exists
@@ -174,5 +215,20 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     } catch (e) {
       this.log.error('Error while discover devices', e)
     }
+  }
+
+  private shouldIncludeDevice(device: Device): boolean {
+    return (
+      this.config.devicesToExclude.find(id => id === device.id) === undefined &&
+      this.config.devicesToExclude.find(name => name === device.name) === undefined
+    )
+  }
+
+  private shouldIncludeLocation(location: Location) {
+    return (
+      this.config.locationsToInclude.length == 0 ||
+      this.config.locationsToInclude.find(id => id === location.id) !== undefined ||
+      this.config.locationsToInclude.find(name => name === location.name) !== undefined
+    )
   }
 }

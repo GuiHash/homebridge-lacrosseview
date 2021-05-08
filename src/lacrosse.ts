@@ -30,7 +30,7 @@ type ResponseLogin = {
   refreshToken: string
 }
 
-type Device = {
+export type Device = {
   id: string
   modifiedOn: Date
   name: string
@@ -49,8 +49,9 @@ type Sensor = {
   fields: [string]
 }
 
-type Location = {
+export type Location = {
   id: string
+  name: string
 }
 
 enum Unit {
