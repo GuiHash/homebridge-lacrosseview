@@ -157,7 +157,11 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
         if (initial || !existingAccessory) {
           this.log.info('New Device Online: [%s] sensor [%s]', device.name, device.id)
+          if (!existingAccessory) {
             this.log.info('Adding: [%s] sensor [%s]', device.name, device.id)
+          } else {
+            this.log.info('Updating: [%s] sensor [%s]', device.name, device.id)
+          }
         }
         if (existingAccessory) {
           // the accessory already exists
