@@ -20,11 +20,15 @@ export class Accessory {
     this.log = platform.log
 
     const serialNumber = accessory.context?.device.sensor.serial
+
+    // Fakego doesn't support `/` in accessory infos
+    const normalizedDeviceName = accessory.context?.device.sensor.type.name.replace(/\//, '\\')
+
     // set accessory information
     accessory
       .getService(platform.Service.AccessoryInformation)!
       .setCharacteristic(platform.Characteristic.Manufacturer, 'LA CROSSE TECHNOLOGY')
-      .setCharacteristic(platform.Characteristic.Model, accessory.context?.device.sensor.type.name)
+      .setCharacteristic(platform.Characteristic.Model, normalizedDeviceName)
       .setCharacteristic(platform.Characteristic.SerialNumber, serialNumber)
 
     if (isTemperatureAccessory(accessory)) {
