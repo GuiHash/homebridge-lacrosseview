@@ -25,6 +25,26 @@
         "description": "How often to check LaCrossView API",
         "placeholder": "200"
       },
+      "devicesToExclude": {
+          "title": "Devices to Exclude (Name/ID)",
+          "description": "Add devices identifier (Name, ID from logs) to exclude from homebridge",
+          "type": "array",
+          "items": {
+            "title": "Device Name/ID",
+            "type": "string"
+          },
+          "default": []
+      },
+      "locationsToInclude": {
+          "title": "Device locations to include",
+          "description": "Device location IDs or names to include when discovering LaCrosseView devices (leave empty for all locations)",
+          "type": "array",
+          "items": {
+            "title": "Location Name/ID",
+            "type": "string"
+          },
+          "default": []
+      },
       "fakeGatoEnabled": {
         "title": "Enable FakeGato",
         "type": "boolean",
@@ -48,6 +68,22 @@
       "items": ["email", "password"]
     },
     "pollingInterval",
+    {
+      "key": "devicesToExclude",
+      "type": "array",
+      "buttonText": "Add Device",
+      "items": [
+        "devicesToExclude[]"
+      ]
+    },
+    {
+      "key": "locationsToInclude",
+      "type": "array",
+      "buttonText": "Add Location",
+      "items": [
+        "locationsToInclude[]"
+      ]
+    },
     {
       "type": "fieldset",
       "title": "Elgato Eve",
