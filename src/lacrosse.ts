@@ -30,7 +30,7 @@ type ResponseLogin = {
   refreshToken: string
 }
 
-export type Device = {
+type Device = {
   id: string
   modifiedOn: Date
   name: string
@@ -49,7 +49,7 @@ type Sensor = {
   fields: [string]
 }
 
-export type Location = {
+type Location = {
   id: string
   name: string
 }
@@ -138,15 +138,15 @@ export default class LaCrosseAPI {
       locations = await this.getLocations()
     }
 
-    const result: Device[] = []
-    for (const location of locations) {
-      const url = LACROSSE_DEVICES_URL.replace('%ID%', location.id)
-      const body: ResponseData<Device> = await fetch(url, undefined, this.token.value)
+    const devices = await Promise.all(
+      locations.map(async location => {
+        const url = LACROSSE_DEVICES_URL.replace('%ID%', location.id)
+        const body: ResponseData<Device> = await fetch(url, undefined, this.token.value)
+        return body.items
+      }),
+    )
 
-      result.push(...body.items)
-    }
-
-    return result
+    return ([] as Device[]).concat(...devices) // flatten devices
   }
 
   async getDeviceWeatherData(device: Device): Promise<DeviceWeatherData> {

@@ -39,17 +39,23 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
   "email": "your-la-crossse-view@email.com",
   "password": "your-la-crosse-view-password",
 
+  "devicesToExclude": ["id-device"],
+  "locationsToExclude": ["id-location"],
   "pollingInterval": 200,
-  "fakeGatoEnabled": false,
+  "fakeGatoEnabled": false
 }]
 ```
 
 - `platform`: _(Required)_ Must always be set to `LaCrosseVieww`.
 - `email`: _(Required)_ Your La Crosse View application email
 - `password`: _(Required)_ Your La Crosse View application password
-- `pollingInterval`: Interval in seconds to update data _(Default to 200)_
-- `fakeGatoEnabled`: If historical data should be reported to the Elgato Eve App _(Default to false)_
+- `pollingInterval`: Interval in seconds to update data _(Default to `200`)_
+- `devicesToExclude`: Device ids to exclude _(Default to `[]`)_
+- `locationsToExclude`: Location ids to exclude _(Default to `[]`)_
+- `fakeGatoEnabled`: If historical data should be reported to the Elgato Eve App _(Default to `false`)_
 - `fakeGatoStoragePath`: Custom path where to save fakegato history _(Default to homebridge user path)_
+
+> You can find device / location ids in your homebridge logs in [debug mode](https://github.com/homebridge/homebridge/wiki/Basic-Troubleshooting#debug-mode)
 
 ## Elgato Eve
 

@@ -12,14 +12,14 @@ import fakegato from 'fakegato-history'
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings'
 import { Accessory } from './platformAccessory'
 
-import LaCrosseAPI, { Device, Location } from './lacrosse'
+import LaCrosseAPI from './lacrosse'
 
 interface LaCrosseViewConfig extends PlatformConfig {
   password: string
   email: string
   pollingInterval: number
   devicesToExclude: string[]
-  locationsToInclude: string[]
+  locationsToExclude: string[]
   fakeGatoEnabled: boolean
   fakeGatoStoragePath?: string
 }
@@ -42,15 +42,11 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
     password: String(password),
     email: String(email),
     pollingInterval: config.pollingInterval || 200,
-    devicesToExclude: (config.devicesToExclude || []).filter(filterEmpties),
-    locationsToInclude: (config.locationsToInclude || []).filter(filterEmpties),
+    devicesToExclude: config.devicesToExclude || [],
+    locationsToExclude: config.locationsToExclude || [],
     fakeGatoEnabled: fakeGatoEnabled ? Boolean(fakeGatoEnabled) : false,
     fakeGatoStoragePath: fakeGatoStoragePath ? String(fakeGatoStoragePath) : undefined,
   }
-}
-
-function filterEmpties(value: string) {
-  return value && value.trim().length > 0
 }
 
 const DISCOVER_DEVICES_INTERVAL = 10 * 60 * 1000 // every 10 minutes
@@ -84,9 +80,9 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
       this.api.on('didFinishLaunching', () => {
         log.debug('didFinishLaunching')
         // run the method to discover / register your devices as accessories
-        this.discoverDevices(true)
+        this.discoverDevices()
         setInterval(() => {
-          this.discoverDevices(false)
+          this.discoverDevices()
         }, DISCOVER_DEVICES_INTERVAL)
       })
     } catch (e) {
@@ -102,21 +98,11 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
    */
   configureAccessory(accessory: PlatformAccessory) {
     this.log.info(
-      `Loading accessory from cache: [%s] %s %s`,
+      `Loading accessory from cache: [%s] [id: %s] [uuid: %s]`,
       accessory.displayName,
       accessory.context.device.id,
       accessory.UUID,
     )
-
-    if (!this.shouldIncludeDevice(accessory.context.device)) {
-      this.log.info(
-        `Excluding existing device excluded by configuration: [%s] %s %s`,
-        accessory.displayName,
-        accessory.context.device.id,
-        accessory.UUID,
-      )
-      return
-    }
 
     new Accessory(this, accessory)
 
@@ -124,54 +110,38 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     this.accessories.push(accessory)
   }
 
-  async discoverDevices(initial: boolean) {
+  async discoverDevices() {
     try {
-      const allLocations = await this.lacrosse.getLocations()
-      const locations = allLocations.filter(location => {
-        if (initial) {
-          this.log.info('Location: [%s] id [%s]', location.name, location.id)
-        }
-        if (!this.shouldIncludeLocation(location)) {
-          this.log.debug(
-            `Ignoring discovered location excluded by configuration: [%s] id [%s]`,
-            location.name,
-            location.id,
-          )
-          return false
-        }
-        return true
-      })
-
-      const allDevices = await this.lacrosse.getDevices(locations)
+      this.log.info('Discovering devices')
+      const allDevices = await this.lacrosse.getDevices()
+      const locations = [...new Set(allDevices.map(device => `id: ${device.locationId}`))]
+      this.log.debug(`Found ${locations.length} locations [${locations.join(', ')}]`)
       const devices = allDevices.filter(device => {
-        if (!this.shouldIncludeDevice(device)) {
-          this.log.debug(`Ignoring discovered device excluded by configuration: [%s] %s`, device.name, device.id)
-          return false
+        if (this.shouldIncludeDevice(device)) {
+          return true
         }
-        return true
+        this.log.debug(`Ignoring discovered device excluded by configuration: [%s] [id: %s]`, device.name, device.id)
+        return false
       })
 
       for (const device of devices) {
         const uuid = this.api.hap.uuid.generate(device.id)
         const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid)
 
-        if (initial || !existingAccessory) {
-          this.log.info('New Device Online: [%s] sensor [%s]', device.name, device.id)
-          if (!existingAccessory) {
-            this.log.info('Adding: [%s] sensor [%s]', device.name, device.id)
-          } else {
-            this.log.info('Updating: [%s] sensor [%s]', device.name, device.id)
-          }
-        }
         if (existingAccessory) {
           // the accessory already exists
-          this.log.debug('[%s] Existing Accessory found [%s] %s', existingAccessory.displayName, device.id, uuid)
+          this.log.debug(
+            '[%s] Existing Accessory found [id: %s] [uuid: %s]',
+            existingAccessory.displayName,
+            device.id,
+            uuid,
+          )
 
           // Update context accessory
           existingAccessory.context.device = device
           if (existingAccessory.displayName !== device.name) {
             this.log.debug(
-              '[%s] Rename Accessory to [%s] [%s] %s',
+              '[%s] Rename Accessory to %s [id: %s] [uuid: %s]',
               existingAccessory.displayName,
               device.name,
               device.id,
@@ -184,7 +154,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
           this.api.updatePlatformAccessories([existingAccessory])
         } else {
           // the accessory does not yet exist, so we need to create it
-          this.log.debug('Adding new accessory: %s [%s] [%s]', device.name, device.id, uuid)
+          this.log.info('Adding new accessory: %s [id: %s] [uuid: %s]', device.name, device.id, uuid)
 
           // create a new accessory
           const accessory = new this.api.platformAccessory(device.name, uuid)
@@ -213,7 +183,12 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
           // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
           // remove platform accessories when no longer present
           this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory])
-          this.log.debug('Removing existing accessory from cache: %s', accessory.displayName)
+          this.log.debug(
+            'Removing existing accessory: %s [id: %s] [uuid: %s]',
+            accessory.displayName,
+            accessory.context.device.id,
+            accessory.UUID,
+          )
         }
       }
     } catch (e) {
@@ -221,18 +196,9 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     }
   }
 
-  private shouldIncludeDevice(device: Device): boolean {
+  private shouldIncludeDevice(device): boolean {
     return (
-      this.config.devicesToExclude.find(id => id === device.id) === undefined &&
-      this.config.devicesToExclude.find(name => name === device.name) === undefined
-    )
-  }
-
-  private shouldIncludeLocation(location: Location) {
-    return (
-      this.config.locationsToInclude.length == 0 ||
-      this.config.locationsToInclude.find(id => id === location.id) !== undefined ||
-      this.config.locationsToInclude.find(name => name === location.name) !== undefined
+      !this.config.devicesToExclude.includes(device.id) && !this.config.locationsToExclude.includes(device.locationId)
     )
   }
 }
