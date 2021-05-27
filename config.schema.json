@@ -26,24 +26,24 @@
         "placeholder": "200"
       },
       "devicesToExclude": {
-          "title": "Devices to Exclude (Name/ID)",
-          "description": "Add devices identifier (Name, ID from logs) to exclude from homebridge",
-          "type": "array",
-          "items": {
-            "title": "Device Name/ID",
-            "type": "string"
-          },
-          "default": []
+        "title": "Devices to exclude",
+        "description": "Add devices identifier (ID from logs in debug mode) to exclude from homebridge",
+        "type": "array",
+        "items": {
+          "title": "Device ID",
+          "type": "string"
+        },
+        "default": []
       },
-      "locationsToInclude": {
-          "title": "Device locations to include",
-          "description": "Device location IDs or names to include when discovering LaCrosseView devices (leave empty for all locations)",
-          "type": "array",
-          "items": {
-            "title": "Location Name/ID",
-            "type": "string"
-          },
-          "default": []
+      "locationsToExclude": {
+        "title": "Device locations to exclude",
+        "description": "Device location IDs (from logs in debug mode) to exclude when discovering LaCrosseView devices",
+        "type": "array",
+        "items": {
+          "title": "Location ID",
+          "type": "string"
+        },
+        "default": []
       },
       "fakeGatoEnabled": {
         "title": "Enable FakeGato",
@@ -64,24 +64,29 @@
       "title": "Authentication (Required)",
       "description": "Connect to LaCrossView APi",
       "expandable": true,
-      "expanded": true,
+      "expanded": false,
       "items": ["email", "password"]
     },
-    "pollingInterval",
     {
-      "key": "devicesToExclude",
-      "type": "array",
-      "buttonText": "Add Device",
+      "type": "fieldset",
+      "title": "Configuration",
+      "description": "Customize plugin",
+      "expandable": true,
+      "expanded": false,
       "items": [
-        "devicesToExclude[]"
-      ]
-    },
-    {
-      "key": "locationsToInclude",
-      "type": "array",
-      "buttonText": "Add Location",
-      "items": [
-        "locationsToInclude[]"
+        "pollingInterval",
+        {
+          "key": "devicesToExclude",
+          "type": "array",
+          "buttonText": "Add Device",
+          "items": ["devicesToExclude[]"]
+        },
+        {
+          "key": "locationsToExclude",
+          "type": "array",
+          "buttonText": "Add Location",
+          "items": ["locationsToExclude[]"]
+        }
       ]
     },
     {
