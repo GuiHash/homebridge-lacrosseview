@@ -46,7 +46,7 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
 }]
 ```
 
-- `platform`: _(Required)_ Must always be set to `LaCrosseVieww`.
+- `platform`: _(Required)_ Must always be set to `LaCrosseView`.
 - `email`: _(Required)_ Your La Crosse View application email
 - `password`: _(Required)_ Your La Crosse View application password
 - `pollingInterval`: Interval in seconds to update data _(Default to `200`)_
