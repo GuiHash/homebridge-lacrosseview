@@ -13,7 +13,7 @@ interface ResponseData<T> {
   items: [T]
 }
 
-export type DeviceWeatherData = {
+type DeviceWeatherData = {
   humidity?: number
   temperature?: number
   barometricPressure?: number
@@ -149,7 +149,7 @@ export default class LaCrosseAPI {
     return ([] as Device[]).concat(...devices) // flatten devices
   }
 
-  async getDeviceWeatherData(device: Device): Promise<DeviceWeatherData> {
+  async rawWeatherData(device: Device): Promise<RawWeatherData> {
     await this.renewTokenIfNeeded()
 
     const url = LACROSSE_WEATHER_URL.replace('%DEVICE_ID%', device.id)
@@ -172,6 +172,12 @@ export default class LaCrosseAPI {
       },
       this.token.value,
     )
+
+    return data
+  }
+
+  async getDeviceWeatherData(device: Device): Promise<DeviceWeatherData> {
+    const data: RawWeatherData = await this.rawWeatherData(device)
 
     const dataFields = data[`ref.user-device.${device.id}`]?.['ai.ticks.1']?.fields
 
