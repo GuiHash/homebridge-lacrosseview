@@ -3,7 +3,7 @@
 
 ### Features
 
-* add support for including specific locations and excluding specific devices ([#43](https://github.com/GuiHash/homebridge-lacrosseview/issues/43)) ([98526a5](https://github.com/GuiHash/homebridge-lacrosseview/commit/98526a50489f7149e4c144f5bbbce0749a023b8b))
+* add support for excluding specific locations and specific devices ([#43](https://github.com/GuiHash/homebridge-lacrosseview/issues/43)) ([98526a5](https://github.com/GuiHash/homebridge-lacrosseview/commit/98526a50489f7149e4c144f5bbbce0749a023b8b)) and ([#60](https://github.com/GuiHash/homebridge-lacrosseview/issues/60)) ([0bb8ee0](https://github.com/GuiHash/homebridge-lacrosseview/commit/0bb8ee0826913d315168afb19f416c94ff22850f))
 * do not create accessory when device is not supported ([#65](https://github.com/GuiHash/homebridge-lacrosseview/issues/65)) ([3c7951b](https://github.com/GuiHash/homebridge-lacrosseview/commit/3c7951bcbaa0d828df183c04d2af50480f95fcfe))
 
 
@@ -16,7 +16,6 @@
 ### Chore
 
 * fix security update ([#67](https://github.com/GuiHash/homebridge-lacrosseview/issues/67)) ([7b5fdfa](https://github.com/GuiHash/homebridge-lacrosseview/commit/7b5fdfa0ada2a821f932fd82dcc66126d494f8b4))
-* rewrite exclude/include features ([#60](https://github.com/GuiHash/homebridge-lacrosseview/issues/60)) ([0bb8ee0](https://github.com/GuiHash/homebridge-lacrosseview/commit/0bb8ee0826913d315168afb19f416c94ff22850f))
 * upgrade dependencies ([#66](https://github.com/GuiHash/homebridge-lacrosseview/issues/66)) ([72c93e5](https://github.com/GuiHash/homebridge-lacrosseview/commit/72c93e5a9f3602f3b12171d9db4a6ef99108b83e))
 * upgrade to GitHub-native Dependabot ([#36](https://github.com/GuiHash/homebridge-lacrosseview/issues/36)) ([7b6ac6c](https://github.com/GuiHash/homebridge-lacrosseview/commit/7b6ac6c6f0f2c35c79f0b2f1df46fcbcf120453c))
 
