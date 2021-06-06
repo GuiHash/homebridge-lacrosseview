@@ -104,6 +104,11 @@ export class Accessory {
   }
 }
 
+export function isCompatibleDevice(device) {
+  const accessory = { context: { device } }
+  return isTemperatureAccessory(accessory) || isHumidityAccessory(accessory)
+}
+
 function isTemperatureAccessory(accessory) {
   return typeof getFields(accessory).Temperature === 'number'
 }

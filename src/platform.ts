@@ -10,7 +10,7 @@ import {
 import fakegato from 'fakegato-history'
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings'
-import { Accessory } from './platformAccessory'
+import { Accessory, isCompatibleDevice } from './platformAccessory'
 
 import LaCrosseAPI from './lacrosse'
 
@@ -116,13 +116,38 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
       const allDevices = await this.lacrosse.getDevices()
       const locations = [...new Set(allDevices.map(device => `id: ${device.locationId}`))]
       this.log.debug(`Found ${locations.length} locations [${locations.join(', ')}]`)
-      const devices = allDevices.filter(device => {
-        if (this.shouldIncludeDevice(device)) {
-          return true
-        }
-        this.log.debug(`Ignoring discovered device excluded by configuration: [%s] [id: %s]`, device.name, device.id)
-        return false
-      })
+      const devices = allDevices
+        .filter(device => {
+          if (this.shouldIncludeDevice(device)) {
+            return true
+          }
+          this.log.debug(`Ignoring discovered device excluded by configuration: [%s] [id: %s]`, device.name, device.id)
+          return false
+        })
+        .filter(device => {
+          if (isCompatibleDevice(device)) {
+            return true
+          }
+          this.lacrosse
+            .rawWeatherData(device)
+            .then(data => {
+              this.log.info(
+                'Ignoring discovered device excluded by incompatibility: [%s] [id: %s]',
+                device.name,
+                device.id,
+              )
+              this.log.info(
+                'Please consider restarting homebridge in debug mode and opening an issue on github with the debug informations printed',
+              )
+              this.log.debug(`Device data %s`, JSON.stringify(device, null, 1))
+              this.log.debug(`Raw weather data %s`, JSON.stringify(data, null, 1))
+              this.log.info(
+                'If you want to hide this message, add device [%s] to `devicesToExclude` configuration',
+                device.id,
+              )
+            })
+            .catch(e => this.log.error('Error while getting incompatible device data', e))
+        })
 
       for (const device of devices) {
         const uuid = this.api.hap.uuid.generate(device.id)
