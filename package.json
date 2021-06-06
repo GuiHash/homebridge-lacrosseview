@@ -1,7 +1,7 @@
 {
   "name": "homebridge-lacrosseview",
   "displayName": "Homebridge La Crosse View",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Homebridge Plugin providing La Crosse View sensors support",
   "main": "build/index.js",
   "files": [
