@@ -15,7 +15,10 @@ export class Accessory {
   private lacrosse: LaCrosseAPI
   private log: Logger
 
-  constructor(private readonly platform: LaCrosseViewPlatform, private readonly accessory: PlatformAccessory) {
+  constructor(
+    private readonly platform: LaCrosseViewPlatform,
+    private readonly accessory: PlatformAccessory,
+  ) {
     this.lacrosse = platform.lacrosse
     this.log = platform.log
 

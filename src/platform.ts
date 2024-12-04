@@ -66,7 +66,11 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = []
 
-  constructor(public readonly log: Logger, config: PlatformConfig, public readonly api: API) {
+  constructor(
+    public readonly log: Logger,
+    config: PlatformConfig,
+    public readonly api: API,
+  ) {
     try {
       this.config = generateConfig(config)
       this.FakeGatoHistoryService = fakegato(this.api)
