@@ -32,10 +32,10 @@ type ResponseLogin = {
 
 type Device = {
   id: string
-  modifiedOn: Date
+  modifiedOn: string
   name: string
   sensor: Sensor
-  createdOn: Date
+  createdOn: string
   shallow: boolean
   weight: string
   flaggedForSynchVNext: boolean
@@ -46,7 +46,7 @@ type Device = {
 
 // TODO complete types
 type Sensor = {
-  fields: [string]
+  fields: Record<string, number>
 }
 
 type Location = {
@@ -101,7 +101,7 @@ export default class LaCrosseAPI {
   }
 
   private async renewTokenIfNeeded() {
-    if (Date.now() > this.token.expiresAt) {
+    if (!this.token.value || Date.now() > this.token.expiresAt) {
       await this.login()
     }
   }
@@ -157,7 +157,7 @@ export default class LaCrosseAPI {
     const fields = Object.keys(device.sensor.fields).join()
 
     // Data is updated each 200000ms on the api and we want only the last update
-    const from = Date.now() - 200000
+    const from = Date.now() - 2000000
 
     const data: RawWeatherData = await fetch(
       url,
