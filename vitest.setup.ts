@@ -9,8 +9,8 @@ const server = setupServer(
     if (
       !body ||
       !(typeof body === 'object') ||
-      body.email !== 'a-valid-email' ||
-      body.password !== 'a-valid-password'
+      body.email !== 'an-email@example.local' ||
+      body.password !== 'password'
     ) {
       return HttpResponse.json(
         {
@@ -115,12 +115,9 @@ const server = setupServer(
                 factory: '14',
                 Composite: '0',
                 display: '1',
-                SoftAP: '1',
                 'data-stream': '1',
                 'device-glyph': '20',
-                WPS: '1',
               },
-              internalAttributes: { SoftAP: '1' },
               fields: {
                 Temperature: 1,
                 notSupported: 0,
