@@ -2,6 +2,7 @@
   "name": "homebridge-lacrosseview",
   "displayName": "Homebridge La Crosse View",
   "version": "1.2.0",
+  "type": "module",
   "description": "Homebridge Plugin providing La Crosse View sensors support",
   "main": "build/index.js",
   "files": [
@@ -37,7 +38,9 @@
   ],
   "dependencies": {
     "fakegato-history": "^0.6.1",
-    "got": "^11.8.2"
+    "got": "^14.4.5",
+    "lru-cache": "^11.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",

@@ -24,9 +24,28 @@ test('throw an error if invalid email', async () => {
     }),
   )
 
-  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
+  const lacrosse = new LaCrosseAPI('an-invalid-email@example.local', 'password')
 
-  await expect(() => lacrosse.getLocations()).rejects.toThrowError('EMAIL_NOT_FOUND')
+  await expect(() => lacrosse.getLocations()).rejects.toMatchObject({
+    name: 'HTTPError',
+    response: {
+      statusCode: 400,
+      statusMessage: 'Bad Request',
+      body: {
+        error: {
+          code: 400,
+          message: 'EMAIL_NOT_FOUND',
+          errors: [
+            {
+              message: 'EMAIL_NOT_FOUND',
+              domain: 'global',
+              reason: 'invalid',
+            },
+          ],
+        },
+      },
+    },
+  })
 })
 
 test('throw an error if invalid password', async () => {
@@ -50,13 +69,32 @@ test('throw an error if invalid password', async () => {
       )
     }),
   )
-  const lacrosse = new LaCrosseAPI('guillaumus@gmail.com', 'password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'invalid-password')
 
-  await expect(() => lacrosse.getLocations()).rejects.toThrowError('INVALID_PASSWORD')
+  await expect(() => lacrosse.getLocations()).rejects.toMatchObject({
+    name: 'HTTPError',
+    response: {
+      statusCode: 400,
+      statusMessage: 'Bad Request',
+      body: {
+        error: {
+          code: 400,
+          message: 'INVALID_PASSWORD',
+          errors: [
+            {
+              message: 'INVALID_PASSWORD',
+              domain: 'global',
+              reason: 'invalid',
+            },
+          ],
+        },
+      },
+    },
+  })
 })
 
 test('get all locations', async () => {
-  const lacrosse = new LaCrosseAPI('a-valid-email', 'a-valid-password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
 
   await expect(lacrosse.getLocations()).resolves.toStrictEqual([
     {
@@ -73,7 +111,7 @@ test('get all locations', async () => {
 })
 
 test('get all devices', async () => {
-  const lacrosse = new LaCrosseAPI('a-valid-email', 'a-valid-password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
 
   await expect(lacrosse.getDevices()).resolves.toStrictEqual([
     {
@@ -121,12 +159,9 @@ test('get all devices', async () => {
           factory: '14',
           Composite: '0',
           display: '1',
-          SoftAP: '1',
           'data-stream': '1',
           'device-glyph': '20',
-          WPS: '1',
         },
-        internalAttributes: { SoftAP: '1' },
         fields: {
           Temperature: 1,
           notSupported: 0,
@@ -162,7 +197,7 @@ test('get all devices', async () => {
 })
 
 test('get device weather data', async () => {
-  const lacrosse = new LaCrosseAPI('a-valid-email', 'a-valid-password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
 
   await expect(
     lacrosse.getDeviceWeatherData({

@@ -1,58 +1,179 @@
-import got, { Options } from 'got'
-import { URL } from 'url'
+import got, { Got } from 'got'
+import { LRUCache } from 'lru-cache'
+import { z } from 'zod'
 
-const LACROSSE_LOGIN_URL =
-  'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyD-Uo0hkRIeDYJhyyIg-TvAv8HhExARIO4'
-const LACROSSE_LOCATION_URL = 'https://lax-gateway.appspot.com/_ah/api/lacrosseClient/v1.1/active-user/locations'
-const LACROSSE_DEVICES_URL =
-  'https://lax-gateway.appspot.com/_ah/api/lacrosseClient/v1.1/active-user/location/%ID%/sensorAssociations?prettyPrint=false'
-const LACROSSE_WEATHER_URL =
-  'https://ingv2.lacrossetechnology.com/api/v1.1/active-user/device-association/ref.user-device.%DEVICE_ID%/feed'
+const cache = new LRUCache({ max: 1 })
 
-interface ResponseData<T> {
-  items: [T]
+const loginSchema = z.object({
+  kind: z.string(),
+  localId: z.string(),
+  email: z.string(),
+  displayName: z.string(),
+  idToken: z.string(),
+  registered: z.boolean(),
+  refreshToken: z.string(),
+  expiresIn: z.coerce.number(),
+})
+
+const locationsSchema = z.object({
+  items: z.array(
+    z.object({
+      id: z.string(),
+      modifiedOn: z.string(),
+      createdOn: z.string(),
+      shallow: z.boolean(),
+      weight: z.string(),
+      flaggedForSynchVNext: z.boolean(),
+      name: z.string(),
+      ownerId: z.string(),
+    }),
+  ),
+})
+
+const devicesSchema = z.object({
+  items: z.array(
+    z.object({
+      id: z.string(),
+      modifiedOn: z.string(),
+      createdOn: z.string(),
+      shallow: z.boolean(),
+      weight: z.string(),
+      flaggedForSynchVNext: z.boolean(),
+      name: z.string(),
+      sensor: z
+        .object({
+          id: z.string(),
+          modifiedOn: z.string(),
+          createdOn: z.string(),
+          shallow: z.boolean(),
+          type: z.object({
+            id: z.string(),
+            shallow: z.boolean(),
+            category: z.number(),
+            name: z.string(),
+            internalName: z.string(),
+            description: z.string(),
+            image: z.string(),
+            fields: z.object({
+              notSupported: z.number().optional(),
+              Temperature: z.number().optional(),
+              Humidity: z.number().optional(),
+              HeatIndex: z.number().optional(),
+              BarometricPressure: z.number().optional(),
+            }),
+          }),
+          series: z.string(),
+          serial: z.string(),
+          controlCode: z.number(),
+          verificationCode: z.string(),
+          attributes: z.object({
+            factory: z.string(),
+            Composite: z.string(),
+            display: z.string(),
+            'data-stream': z.string(),
+            'device-glyph': z.string(),
+          }),
+          fields: z.object({
+            notSupported: z.number().optional(),
+            Temperature: z.number().optional(),
+            Humidity: z.number().optional(),
+            HeatIndex: z.number().optional(),
+            BarometricPressure: z.number().optional(),
+          }),
+          permissions: z.object({
+            owner: z.boolean(),
+            read: z.boolean(),
+            subscribe: z.boolean(),
+            claim: z.boolean(),
+            admin: z.boolean(),
+            share: z.boolean(),
+            'admin.geo': z.boolean(),
+            'admin.smartview': z.boolean(),
+          }),
+          category: z.number(),
+          sensorTypeEntityId: z.string(),
+        })
+        .passthrough(),
+      sensorId: z.string(),
+      locationId: z.string(),
+      ownerId: z.string(),
+    }),
+  ),
+})
+
+const rawWeatherDataSchema = z.record(
+  z.string(),
+  z.object({
+    'ai.ticks.1': z.object({
+      time_zone: z.string(),
+      range: z.object({
+        unix: z.object({ to: z.number(), from: z.number(), continue: z.number() }),
+        iso8601: z.object({
+          to: z.string(),
+          from: z.string(),
+          continue: z.string(),
+        }),
+      }),
+      fields: z.object({
+        Temperature: z
+          .object({
+            values: z.array(z.object({ u: z.number(), s: z.number() })),
+            unit_enum: z.number(),
+            unit: z.string(),
+          })
+          .optional(),
+        Humidity: z
+          .object({
+            values: z.array(z.object({ u: z.number(), s: z.number() })),
+            unit_enum: z.number(),
+            unit: z.string(),
+          })
+          .optional(),
+        HeatIndex: z
+          .object({
+            values: z.array(z.object({ u: z.number(), s: z.number() })),
+            unit_enum: z.number(),
+            unit: z.string(),
+          })
+          .optional(),
+        BarometricPressure: z
+          .object({
+            values: z.array(z.object({ u: z.number(), s: z.number() })),
+            unit_enum: z.number(),
+            unit: z.enum(['millibars']),
+          })
+          .optional(),
+      }),
+    }),
+  }),
+)
+
+async function getToken(email: string, password: string) {
+  const token = cache.get('idToken')
+
+  if (token) {
+    return token
+  }
+
+  const { idToken, expiresIn } = await got
+    .post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword', {
+      searchParams: {
+        key: 'AIzaSyD-Uo0hkRIeDYJhyyIg-TvAv8HhExARIO4',
+      },
+      json: { email, password, returnSecureToken: true },
+      responseType: 'json',
+      resolveBodyOnly: true,
+    })
+    .then(loginSchema.parse)
+
+  cache.set('idToken', idToken, { ttl: expiresIn * 1000 })
+
+  return idToken
 }
 
-type DeviceWeatherData = {
-  humidity?: number
-  temperature?: number
-  barometricPressure?: number
-  heatIndex?: number
-}
+type Device = z.infer<typeof devicesSchema>['items'][number]
 
-type ResponseLogin = {
-  idToken: string
-  expiresIn: string
-  kind: string
-  localId: string
-  displayName?: string
-  registered: boolean
-  refreshToken: string
-}
-
-type Device = {
-  id: string
-  modifiedOn: string
-  name: string
-  sensor: Sensor
-  createdOn: string
-  shallow: boolean
-  weight: string
-  flaggedForSynchVNext: boolean
-  sensorId: string
-  locationId: string
-  ownerId: string
-}
-
-// TODO complete types
-type Sensor = {
-  fields: Record<string, number>
-}
-
-type Location = {
-  id: string
-  name: string
-}
+type Location = z.infer<typeof locationsSchema>['items'][number]
 
 enum Unit {
   Celcius = 'degrees_celsius',
@@ -67,119 +188,74 @@ type DataField = {
   unit: Unit
 }
 
-type RawWeatherData = {
-  [key: string]: {
-    [key: string]: {
-      time_zone: string
-      range: {
-        unix: { to: number; from: number; continue: number }
-        iso8601: {
-          to: Date
-          from: Date
-          continue: Date
-        }
-      }
-      fields: {
-        Temperature?: DataField
-        Humidity?: DataField
-        HeatIndex?: DataField
-        BarometricPressure?: DataField
-      }
-    }
-  }
-}
-
 export default class LaCrosseAPI {
-  private email: string
-  private password: string
-  private token: { expiresAt: number; value: string }
+  private client: Got
 
   constructor(email: string, password: string) {
-    this.email = email
-    this.password = password
-    this.token = { expiresAt: Date.now(), value: '' }
-  }
-
-  private async renewTokenIfNeeded() {
-    if (!this.token.value || Date.now() > this.token.expiresAt) {
-      await this.login()
-    }
-  }
-
-  private async login() {
-    const json = {
-      email: this.email,
-      password: this.password,
-      returnSecureToken: true,
-    }
-
-    const { idToken: value, expiresIn }: ResponseLogin = await fetch(LACROSSE_LOGIN_URL, {
-      json,
-      method: 'POST',
+    this.client = got.extend({
+      prefixUrl: 'https://lax-gateway.appspot.com/_ah/api/lacrosseClient/v1.1/active-user',
+      responseType: 'json',
+      resolveBodyOnly: true,
+      hooks: {
+        beforeRequest: [
+          async options => {
+            const token = await getToken(email, password)
+            options.headers['Authorization'] = `Bearer ${token}`
+          },
+        ],
+      },
     })
-
-    if (!value) {
-      throw new Error('Login Failed. Check credentials and try again')
-    }
-
-    this.token = { value, expiresAt: Date.now() + Number(expiresIn) * 1000 - 1000 }
   }
 
-  async getLocations(): Promise<Location[]> {
-    await this.renewTokenIfNeeded()
-    const body: ResponseData<Location> = await fetch(LACROSSE_LOCATION_URL, undefined, this.token.value)
+  async getLocations() {
+    const body = await this.client.get('locations').then(locationsSchema.parse)
 
     return body.items
   }
 
   async getDevices(locations?: Location[]): Promise<Device[]> {
-    await this.renewTokenIfNeeded()
     if (!locations) {
       locations = await this.getLocations()
     }
 
     const devices = await Promise.all(
       locations.map(async location => {
-        const url = LACROSSE_DEVICES_URL.replace('%ID%', location.id)
-        const body: ResponseData<Device> = await fetch(url, undefined, this.token.value)
+        const body = await this.client.get(`location/${location.id}/sensorAssociations`).then(devicesSchema.parse)
         return body.items
       }),
     )
 
-    return ([] as Device[]).concat(...devices) // flatten devices
+    return devices.flat()
   }
 
-  async rawWeatherData(device: Device): Promise<RawWeatherData> {
-    await this.renewTokenIfNeeded()
-
-    const url = LACROSSE_WEATHER_URL.replace('%DEVICE_ID%', device.id)
-    const tz = 'Europe/Paris'
+  async rawWeatherData(device: Device) {
     const fields = Object.keys(device.sensor.fields).join()
 
-    // Data is updated each 200000ms on the api and we want only the last update
-    const from = Date.now() - 2000000
+    // Get data from the last 12 hours
+    const from = Date.now() - 12 * 60 * 60 * 1000
 
-    const data: RawWeatherData = await fetch(
-      url,
-      {
+    const userDevice = `ref.user-device.${device.id}`
+    const aggregates = 'ai.ticks.1'
+
+    const data = await this.client
+      .get(`device-association/${userDevice}/feed`, {
+        prefixUrl: 'https://ingv2.lacrossetechnology.com/api/v1.1/active-user',
         searchParams: {
           fields,
-          tz,
           from: Math.floor(from / 1000),
-          aggregates: 'ai.ticks.1',
+          aggregates,
           types: 'spot',
         },
-      },
-      this.token.value,
-    )
+      })
+      .then(rawWeatherDataSchema.parse)
 
-    return data
+    return data[userDevice][aggregates]
   }
 
-  async getDeviceWeatherData(device: Device): Promise<DeviceWeatherData> {
-    const data: RawWeatherData = await this.rawWeatherData(device)
+  async getDeviceWeatherData(device: Device) {
+    const data = await this.rawWeatherData(device)
 
-    const dataFields = data[`ref.user-device.${device.id}`]?.['ai.ticks.1']?.fields
+    const dataFields = data?.fields
 
     const valuesTemperature = convertToCelcius(dataFields?.Temperature)?.values
     const valuesHunidity = dataFields?.Humidity?.values
@@ -211,29 +287,4 @@ function convertToCelcius(temperature?): DataField {
   }
 
   throw new Error(`Unit ${temperature.unit} cannot be converted to celcius`)
-}
-
-interface fetch {
-  (url: string | URL, options: Options): Promise<ResponseLogin>
-  (url: string | URL, options: Options, token: string): Promise<RawWeatherData>
-  <T>(url: string | URL, options: Options | undefined, token: string): Promise<ResponseData<T>>
-}
-
-const fetch: fetch = async function <T>(url, options?, token?): Promise<T> {
-  const headers = token ? { Authorization: `Bearer ${token}` } : {}
-
-  const { searchParams, json, method } = options || {}
-
-  try {
-    return await got(url, {
-      method,
-      resolveBodyOnly: true,
-      responseType: 'json',
-      headers,
-      searchParams,
-      json,
-    })
-  } catch (e) {
-    throw new Error(e.response?.body?.error?.message || e.message)
-  }
 }
