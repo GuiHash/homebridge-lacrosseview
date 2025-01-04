@@ -209,6 +209,19 @@ test('get device weather data', async () => {
       flaggedForSynchVNext: true,
       name: 'Device',
       sensor: {
+        id: 'a-sensor-id',
+        type: {
+          id: '5758531941433344',
+          shallow: false,
+          category: 10,
+          name: 'WS6862BLA FRANCE',
+          internalName: 'WS6862BLA',
+          description: 'C83100 FOR FRANCE UPLOAD PRESSURE',
+          image:
+            'https://firebasestorage.googleapis.com/v0/b/lax-gateway.appspot.com/o/images%2FWS6862BLA.png?alt=media',
+        },
+        series: 'V2',
+        serial: 'serial',
         fields: {
           Temperature: 1,
           notSupported: 0,

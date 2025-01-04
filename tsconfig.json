@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2022", // ~node10
-    "module": "NodeNext",
-    "lib": ["ES2022"],
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./build",
-    "rootDir": "./src",
-    "strict": true,
+    /* Base Options: */
     "esModuleInterop": true,
-    "noImplicitAny": false
+    "skipLibCheck": true,
+    "target": "es2022",
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    /* If transpiling with TypeScript: */
+    "module": "NodeNext",
+    "outDir": "build",
+    "sourceMap": true,
+
+    "lib": ["es2022"]
   },
   "include": ["src/"],
   "exclude": ["**/*.test.ts"]

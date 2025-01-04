@@ -1,4 +1,4 @@
-import { Service, PlatformAccessory, Logger } from 'homebridge'
+import type { Service, PlatformAccessory, Logger } from 'homebridge'
 import LaCrosseAPI from './lacrosse.js'
 
 import { LaCrosseViewPlatform } from './platform.js'
