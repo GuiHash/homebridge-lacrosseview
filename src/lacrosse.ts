@@ -4,100 +4,92 @@ import { z } from 'zod'
 
 const cache = new LRUCache({ max: 1 })
 
-const loginSchema = z.object({
-  kind: z.string(),
-  localId: z.string(),
-  email: z.string(),
-  displayName: z.string(),
-  idToken: z.string(),
-  registered: z.boolean(),
-  refreshToken: z.string(),
-  expiresIn: z.coerce.number(),
-})
+const loginSchema = z
+  .object({
+    kind: z.string().optional(),
+    localId: z.string().optional(),
+    email: z.string().optional(),
+    displayName: z.string().optional(),
+    idToken: z.string(),
+    registered: z.boolean().optional(),
+    refreshToken: z.string().optional(),
+    expiresIn: z.coerce.number(),
+  })
+  .passthrough()
 
 const locationsSchema = z.object({
   items: z.array(
-    z.object({
-      id: z.string(),
-      modifiedOn: z.string(),
-      createdOn: z.string(),
-      shallow: z.boolean(),
-      weight: z.string(),
-      flaggedForSynchVNext: z.boolean(),
-      name: z.string(),
-      ownerId: z.string(),
-    }),
+    z
+      .object({
+        id: z.string(),
+        modifiedOn: z.string().optional(),
+        createdOn: z.string().optional(),
+        shallow: z.boolean().optional(),
+        weight: z.string().optional(),
+        flaggedForSynchVNext: z.boolean().optional(),
+        name: z.string().optional(),
+        ownerId: z.string().optional(),
+      })
+      .passthrough(),
   ),
 })
 
 const devicesSchema = z.object({
   items: z.array(
-    z.object({
-      id: z.string(),
-      modifiedOn: z.string(),
-      createdOn: z.string(),
-      shallow: z.boolean(),
-      weight: z.string(),
-      flaggedForSynchVNext: z.boolean(),
-      name: z.string(),
-      sensor: z
-        .object({
-          id: z.string(),
-          modifiedOn: z.string(),
-          createdOn: z.string(),
-          shallow: z.boolean(),
-          type: z.object({
+    z
+      .object({
+        id: z.string(),
+        modifiedOn: z.string().optional(),
+        createdOn: z.string().optional(),
+        shallow: z.boolean().optional(),
+        weight: z.string().optional(),
+        flaggedForSynchVNext: z.boolean().optional(),
+        name: z.string(),
+        sensor: z
+          .object({
             id: z.string(),
-            shallow: z.boolean(),
-            category: z.number(),
-            name: z.string(),
-            internalName: z.string(),
-            description: z.string(),
-            image: z.string(),
-            fields: z.object({
-              notSupported: z.number().optional(),
-              Temperature: z.number().optional(),
-              Humidity: z.number().optional(),
-              HeatIndex: z.number().optional(),
-              BarometricPressure: z.number().optional(),
+            modifiedOn: z.string().optional(),
+            createdOn: z.string().optional(),
+            shallow: z.boolean().optional(),
+            type: z.object({
+              id: z.string().optional(),
+              shallow: z.boolean(),
+              category: z.number(),
+              name: z.string(),
+              internalName: z.string(),
+              description: z.string(),
+              image: z.string(),
+              fields: z
+                .object({
+                  notSupported: z.number().optional(),
+                  Temperature: z.number().optional(),
+                  Humidity: z.number().optional(),
+                  HeatIndex: z.number().optional(),
+                  BarometricPressure: z.number().optional(),
+                })
+                .passthrough(),
             }),
-          }),
-          series: z.string(),
-          serial: z.string(),
-          controlCode: z.number(),
-          verificationCode: z.string(),
-          attributes: z.object({
-            factory: z.string(),
-            Composite: z.string(),
-            display: z.string(),
-            'data-stream': z.string(),
-            'device-glyph': z.string(),
-          }),
-          fields: z.object({
-            notSupported: z.number().optional(),
-            Temperature: z.number().optional(),
-            Humidity: z.number().optional(),
-            HeatIndex: z.number().optional(),
-            BarometricPressure: z.number().optional(),
-          }),
-          permissions: z.object({
-            owner: z.boolean(),
-            read: z.boolean(),
-            subscribe: z.boolean(),
-            claim: z.boolean(),
-            admin: z.boolean(),
-            share: z.boolean(),
-            'admin.geo': z.boolean(),
-            'admin.smartview': z.boolean(),
-          }),
-          category: z.number(),
-          sensorTypeEntityId: z.string(),
-        })
-        .passthrough(),
-      sensorId: z.string(),
-      locationId: z.string(),
-      ownerId: z.string(),
-    }),
+            series: z.string().optional(),
+            serial: z.string(),
+            fields: z
+              .object({
+                notSupported: z.number().optional(),
+                Temperature: z.number().optional(),
+                Humidity: z.number().optional(),
+                HeatIndex: z.number().optional(),
+                BarometricPressure: z.number().optional(),
+              })
+              .passthrough()
+              .optional(),
+            category: z.number(),
+            sensorTypeEntityId: z.string(),
+          })
+          .passthrough(),
+        sensorId: z.string(),
+        locationId: z.string(),
+        ownerId: z.string(),
+      })
+      .passthrough(),
   ),
 })
 
@@ -105,15 +97,6 @@ const rawWeatherDataSchema = z.record(
   z.string(),
   z.object({
     'ai.ticks.1': z.object({
-      time_zone: z.string(),
-      range: z.object({
-        unix: z.object({ to: z.number(), from: z.number(), continue: z.number() }),
-        iso8601: z.object({
-          to: z.string(),
-          from: z.string(),
-          continue: z.string(),
-        }),
-      }),
       fields: z.object({
         Temperature: z
           .object({
@@ -229,7 +212,7 @@ export default class LaCrosseAPI {
   }
 
   async rawWeatherData(device: Device) {
-    const fields = Object.keys(device.sensor.fields).join()
+    const fields = Object.keys(device.sensor.fields || {}).join()
 
     // Get data from the last 12 hours
     const from = Date.now() - 12 * 60 * 60 * 1000

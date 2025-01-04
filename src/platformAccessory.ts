@@ -1,13 +1,18 @@
 import { Service, PlatformAccessory, Logger } from 'homebridge'
-import LaCrosseAPI from './lacrosse'
+import LaCrosseAPI from './lacrosse.js'
 
-import { LaCrosseViewPlatform } from './platform'
+import { LaCrosseViewPlatform } from './platform.js'
 
 /**
  * Platform Accessory
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
+
+type Device = Awaited<ReturnType<LaCrosseAPI['getDevices']>>[number]
+
+export type PlatformAccessoryWithContext = PlatformAccessory<{ device: Device }>
+
 export class Accessory {
   private temperatureSensorService?: Service
   private humiditySensorService?: Service
@@ -17,15 +22,15 @@ export class Accessory {
 
   constructor(
     private readonly platform: LaCrosseViewPlatform,
-    private readonly accessory: PlatformAccessory,
+    private readonly accessory: PlatformAccessory<{ device: Device }>,
   ) {
     this.lacrosse = platform.lacrosse
     this.log = platform.log
 
     const serialNumber = accessory.context?.device.sensor.serial
 
-    // Fakego doesn't support `/` in accessory infos
-    const normalizedDeviceName = accessory.context?.device.sensor.type.name.replace(/\//, '\\')
+    // Fakegato doesn't support `/` in accessory infos
+    const normalizedDeviceName = accessory.context.device.sensor.type.name.replace(/\//, '\\')
 
     // set accessory information
     accessory
@@ -34,7 +39,7 @@ export class Accessory {
       .setCharacteristic(platform.Characteristic.Model, normalizedDeviceName)
       .setCharacteristic(platform.Characteristic.SerialNumber, serialNumber)
 
-    if (isTemperatureAccessory(accessory)) {
+    if (isTemperatureAccessory(accessory.context.device)) {
       // set service temperature
       this.temperatureSensorService =
         accessory.getService(platform.Service.TemperatureSensor) ||
@@ -44,7 +49,7 @@ export class Accessory {
       this.temperatureSensorService.setCharacteristic(platform.Characteristic.StatusActive, 0)
     }
 
-    if (isHumidityAccessory(accessory)) {
+    if (isHumidityAccessory(accessory.context.device)) {
       // set service humidity
       this.humiditySensorService =
         accessory.getService(platform.Service.HumiditySensor) ||
@@ -107,19 +112,18 @@ export class Accessory {
   }
 }
 
-export function isCompatibleDevice(device) {
-  const accessory = { context: { device } }
-  return isTemperatureAccessory(accessory) || isHumidityAccessory(accessory)
+export function isCompatibleDevice(device: Device) {
+  return isTemperatureAccessory(device) || isHumidityAccessory(device)
 }
 
-function isTemperatureAccessory(accessory) {
-  return typeof getFields(accessory).Temperature === 'number'
+function isTemperatureAccessory(device: Device) {
+  return typeof getFields(device)?.Temperature === 'number'
 }
 
-function isHumidityAccessory(accessory) {
-  return typeof getFields(accessory).Humidity === 'number'
+function isHumidityAccessory(device: Device) {
+  return typeof getFields(device)?.Humidity === 'number'
 }
 
-function getFields(accessory) {
-  return accessory.context.device.sensor.fields
+function getFields(device: Device) {
+  return device.sensor.fields
 }
