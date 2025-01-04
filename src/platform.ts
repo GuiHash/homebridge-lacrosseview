@@ -1,18 +1,14 @@
-import {
-  API,
-  DynamicPlatformPlugin,
-  Logger,
-  PlatformAccessory,
-  PlatformConfig,
-  Service,
-  Characteristic,
-} from 'homebridge'
+import { API, DynamicPlatformPlugin, Logger, PlatformConfig, Service, Characteristic } from 'homebridge'
 import fakegato from 'fakegato-history'
 
-import { PLATFORM_NAME, PLUGIN_NAME } from './settings'
-import { Accessory, isCompatibleDevice } from './platformAccessory'
+import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js'
+import {
+  Accessory,
+  isCompatibleDevice,
+  PlatformAccessoryWithContext as PlatformAccessory,
+} from './platformAccessory.js'
 
-import LaCrosseAPI from './lacrosse'
+import LaCrosseAPI from './lacrosse.js'
 
 interface LaCrosseViewConfig extends PlatformConfig {
   password: string
@@ -71,29 +67,25 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     config: PlatformConfig,
     public readonly api: API,
   ) {
-    try {
-      this.config = generateConfig(config)
-      this.FakeGatoHistoryService = fakegato(this.api)
-      this.lacrosse = new LaCrosseAPI(this.config.email, this.config.password)
-      this.log.debug('Finished initializing platform: %s', this.config.platform)
+    this.Service = this.api.hap.Service
+    this.Characteristic = this.api.hap.Characteristic
+    this.config = generateConfig(config)
+    this.FakeGatoHistoryService = fakegato(this.api)
+    this.lacrosse = new LaCrosseAPI(this.config.email, this.config.password)
+    this.log.debug('Finished initializing platform: %s', this.config.platform)
 
-      // When this event is fired it means Homebridge has restored all cached accessories from disk.
-      // Dynamic Platform plugins should only register new accessories after this event was fired,
-      // in order to ensure they weren't added to homebridge already. This event can also be used
-      // to start discovery of new accessories.
-      this.api.on('didFinishLaunching', () => {
-        log.debug('didFinishLaunching')
-        // run the method to discover / register your devices as accessories
+    // When this event is fired it means Homebridge has restored all cached accessories from disk.
+    // Dynamic Platform plugins should only register new accessories after this event was fired,
+    // in order to ensure they weren't added to homebridge already. This event can also be used
+    // to start discovery of new accessories.
+    this.api.on('didFinishLaunching', () => {
+      log.debug('didFinishLaunching')
+      // run the method to discover / register your devices as accessories
+      this.discoverDevices()
+      setInterval(() => {
         this.discoverDevices()
-        setInterval(() => {
-          this.discoverDevices()
-        }, DISCOVER_DEVICES_INTERVAL)
-      })
-    } catch (e) {
-      this.lacrosse = new LaCrosseAPI('', '')
-      this.config = config as LaCrosseViewConfig
-      this.log.error(e.message)
-    }
+      }, DISCOVER_DEVICES_INTERVAL)
+    })
   }
 
   /**
@@ -186,7 +178,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
           this.log.info('Adding new accessory: %s [id: %s] [uuid: %s]', device.name, device.id, uuid)
 
           // create a new accessory
-          const accessory = new this.api.platformAccessory(device.name, uuid)
+          const accessory = new this.api.platformAccessory<PlatformAccessory['context']>(device.name, uuid)
 
           // store a copy of the device object in the `accessory.context`
           // the `context` property can be used to store any data about the accessory you may need
