@@ -1,11 +1,11 @@
-import { API, DynamicPlatformPlugin, Logger, PlatformConfig, Service, Characteristic } from 'homebridge'
+import type { API, DynamicPlatformPlugin, Logger, PlatformConfig, Service, Characteristic } from 'homebridge'
 import fakegato from 'fakegato-history'
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js'
 import {
   Accessory,
   isCompatibleDevice,
-  PlatformAccessoryWithContext as PlatformAccessory,
+  type PlatformAccessoryWithContext as PlatformAccessory,
 } from './platformAccessory.js'
 
 import LaCrosseAPI from './lacrosse.js'
@@ -53,8 +53,8 @@ const DISCOVER_DEVICES_INTERVAL = 10 * 60 * 1000 // every 10 minutes
  * parse the user config and discover/register accessories with Homebridge.
  */
 export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
-  public readonly Service: typeof Service = this.api.hap.Service
-  public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic
+  public readonly Service: typeof Service
+  public readonly Characteristic: typeof Characteristic
   public readonly lacrosse: LaCrosseAPI
   public readonly config: LaCrosseViewConfig
   public readonly FakeGatoHistoryService
@@ -217,7 +217,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     }
   }
 
-  private shouldIncludeDevice(device): boolean {
+  private shouldIncludeDevice(device: { id: string; locationId: string }): boolean {
     return (
       !this.config.devicesToExclude.includes(device.id) && !this.config.locationsToExclude.includes(device.locationId)
     )

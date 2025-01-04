@@ -1,4 +1,4 @@
-import got, { Got } from 'got'
+import got, { type Got } from 'got'
 import { LRUCache } from 'lru-cache'
 import { z } from 'zod'
 
@@ -51,24 +51,17 @@ const devicesSchema = z.object({
             modifiedOn: z.string().optional(),
             createdOn: z.string().optional(),
             shallow: z.boolean().optional(),
-            type: z.object({
-              id: z.string().optional(),
-              shallow: z.boolean(),
-              category: z.number(),
-              name: z.string(),
-              internalName: z.string(),
-              description: z.string(),
-              image: z.string(),
-              fields: z
-                .object({
-                  notSupported: z.number().optional(),
-                  Temperature: z.number().optional(),
-                  Humidity: z.number().optional(),
-                  HeatIndex: z.number().optional(),
-                  BarometricPressure: z.number().optional(),
-                })
-                .passthrough(),
-            }),
+            type: z
+              .object({
+                id: z.string().optional().optional(),
+                shallow: z.boolean().optional(),
+                category: z.number().optional(),
+                name: z.string(),
+                internalName: z.string().optional(),
+                description: z.string().optional(),
+                image: z.string().optional(),
+              })
+              .passthrough(),
             series: z.string().optional(),
             serial: z.string(),
             fields: z
@@ -81,16 +74,22 @@ const devicesSchema = z.object({
               })
               .passthrough()
               .optional(),
-            category: z.number(),
-            sensorTypeEntityId: z.string(),
+            category: z.number().optional(),
+            sensorTypeEntityId: z.string().optional(),
           })
           .passthrough(),
-        sensorId: z.string(),
+        sensorId: z.string().optional(),
         locationId: z.string(),
-        ownerId: z.string(),
+        ownerId: z.string().optional(),
       })
       .passthrough(),
   ),
+})
+
+const dataSchema = z.object({
+  values: z.array(z.object({ u: z.number(), s: z.number() })),
+  unit_enum: z.number(),
+  unit: z.enum(['degrees_celsius', 'degrees_fahrenheit', 'relative_humidity', 'millibars']),
 })
 
 const rawWeatherDataSchema = z.record(
@@ -98,34 +97,10 @@ const rawWeatherDataSchema = z.record(
   z.object({
     'ai.ticks.1': z.object({
       fields: z.object({
-        Temperature: z
-          .object({
-            values: z.array(z.object({ u: z.number(), s: z.number() })),
-            unit_enum: z.number(),
-            unit: z.string(),
-          })
-          .optional(),
-        Humidity: z
-          .object({
-            values: z.array(z.object({ u: z.number(), s: z.number() })),
-            unit_enum: z.number(),
-            unit: z.string(),
-          })
-          .optional(),
-        HeatIndex: z
-          .object({
-            values: z.array(z.object({ u: z.number(), s: z.number() })),
-            unit_enum: z.number(),
-            unit: z.string(),
-          })
-          .optional(),
-        BarometricPressure: z
-          .object({
-            values: z.array(z.object({ u: z.number(), s: z.number() })),
-            unit_enum: z.number(),
-            unit: z.enum(['millibars']),
-          })
-          .optional(),
+        Temperature: dataSchema.optional(),
+        Humidity: dataSchema.optional(),
+        HeatIndex: dataSchema.optional(),
+        BarometricPressure: dataSchema.optional(),
       }),
     }),
   }),
@@ -158,18 +133,7 @@ type Device = z.infer<typeof devicesSchema>['items'][number]
 
 type Location = z.infer<typeof locationsSchema>['items'][number]
 
-enum Unit {
-  Celcius = 'degrees_celsius',
-  Fahrenheit = 'degrees_fahrenheit',
-  RelativeHumidity = 'relative_humidity',
-  Millibars = 'millibars',
-}
-
-type DataField = {
-  values: [{ u: number; s: number }]
-  unit_enum: number
-  unit: Unit
-}
+type Temperature = z.infer<typeof rawWeatherDataSchema>[string]['ai.ticks.1']['fields']['Temperature']
 
 export default class LaCrosseAPI {
   private client: Got
@@ -232,6 +196,10 @@ export default class LaCrosseAPI {
       })
       .then(rawWeatherDataSchema.parse)
 
+    if (!data[userDevice]) {
+      throw new Error(`No data for device ${userDevice}`)
+    }
+
     return data[userDevice][aggregates]
   }
 
@@ -258,14 +226,13 @@ function getLastValue(values?: { u: number; s: number }[]): number | undefined {
   return values?.pop()?.s
 }
 
-function convertToCelcius(temperature?): DataField {
+function convertToCelcius(temperature?: Temperature) {
   if (!temperature) return temperature
-  if (temperature.unit === Unit.Celcius) {
+  if (temperature.unit === 'degrees_celsius') {
     return temperature
   }
-  if (temperature.unit === Unit.Fahrenheit) {
+  if (temperature.unit === 'degrees_fahrenheit') {
     temperature.values = temperature.values.map(({ u, s }) => ({ u, s: (s - 32) * (5 / 9) }))
-
     return temperature
   }
 

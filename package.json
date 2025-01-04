@@ -19,7 +19,7 @@
     "url": "https://github.com/GuiHash/homebridge-lacrosseview/issues"
   },
   "engines": {
-    "node": ">=18.19.0",
+    "node": "^18.15.0 || ^20.7.0 || ^22",
     "homebridge": ">=1.0.0"
   },
   "scripts": {
@@ -40,15 +40,15 @@
     "fakegato-history": "^0.6.1",
     "got": "^14.4.5",
     "lru-cache": "^11.0.2",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
     "@semantic-release/github": "^7.2.3",
-    "@types/node": "^15.12.1",
-    "@typescript-eslint/parser": "^8.17.0",
+    "@types/node": "^18.15.0",
+    "@typescript-eslint/parser": "^8.19.0",
     "conventional-changelog-conventionalcommits": "^4.6.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
@@ -58,9 +58,9 @@
     "nodemon": "^2.0.7",
     "prettier": "^3.4.2",
     "semantic-release": "^17.4.3",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.3.2",
-    "typescript-eslint": "^8.17.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.0",
     "vitest": "^2.1.8"
   }
 }
