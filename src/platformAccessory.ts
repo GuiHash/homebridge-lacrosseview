@@ -1,5 +1,5 @@
 import type { Service, PlatformAccessory, Logger } from 'homebridge'
-import LaCrosseAPI from './lacrosse.js'
+import LaCrosseAPI, { deviceSchema } from './lacrosse.js'
 
 import { LaCrosseViewPlatform } from './platform.js'
 
@@ -77,7 +77,7 @@ export class Accessory {
 
   async updateDataSensors() {
     try {
-      this.log.debug(`[%s] lacrosse.getWeatherData(%s)`, this.accessory.displayName, this.accessory.context.device)
+      this.log.debug(`[%s] lacrosse.getWeatherData("%s")`, this.accessory.displayName, this.accessory.context.device.id)
 
       const { humidity, temperature } = await this.lacrosse.getDeviceWeatherData(this.accessory.context.device.id)
 
@@ -110,6 +110,12 @@ export class Accessory {
       }
     }
   }
+}
+
+export function assertPlatformAccessory(
+  accessory: PlatformAccessory,
+): asserts accessory is PlatformAccessoryWithContext {
+  deviceSchema.parse(accessory.context.device)
 }
 
 export function isCompatibleDevice(device: Device) {
