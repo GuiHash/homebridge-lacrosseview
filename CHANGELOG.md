@@ -1,3 +1,17 @@
+## [2.0.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v1.2.0...v2.0.0) (2025-01-05)
+
+### ⚠ BREAKING CHANGES
+
+* bump min compat for node to 18.20 and homebridge to 1.8
+
+### Features
+
+* homebridge v2 compat ([#106](https://github.com/GuiHash/homebridge-lacrosseview/issues/106)) ([89214a0](https://github.com/GuiHash/homebridge-lacrosseview/commit/89214a0e7e074d1faab53ed8122cb804717ff06d))
+
+### Documentations
+
+* update CHANGELOG.md ([2208501](https://github.com/GuiHash/homebridge-lacrosseview/commit/2208501a57d980bfee37d3bd63741a115540dc0c))
+
 ## [1.2.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v1.1.0...v1.2.0) (2021-06-06)
 
 
