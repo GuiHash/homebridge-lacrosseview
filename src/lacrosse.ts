@@ -1,4 +1,4 @@
-import got, { type Got } from 'got'
+import got, { type Got, HTTPError, RequestError } from 'got'
 import { LRUCache } from 'lru-cache'
 import { z } from 'zod'
 
@@ -129,10 +129,6 @@ async function getToken(email: string, password: string) {
   return idToken
 }
 
-type Device = z.infer<typeof devicesSchema>['items'][number]
-
-type Location = z.infer<typeof locationsSchema>['items'][number]
-
 type Temperature = z.infer<typeof rawWeatherDataSchema>[string]['ai.ticks.1']['fields']['Temperature']
 
 export default class LaCrosseAPI {
@@ -154,20 +150,21 @@ export default class LaCrosseAPI {
     })
   }
 
+  @formatError
   async getLocations() {
     const body = await this.client.get('locations').then(locationsSchema.parse)
 
     return body.items
   }
 
-  async getDevices(locations?: Location[]): Promise<Device[]> {
-    if (!locations) {
-      locations = await this.getLocations()
-    }
+  @formatError
+  async getDevices(locationIds?: string[]) {
+    const allLocationIds =
+      locationIds ?? (await this.getLocations().then(locations => locations.map(location => location.id)))
 
     const devices = await Promise.all(
-      locations.map(async location => {
-        const body = await this.client.get(`location/${location.id}/sensorAssociations`).then(devicesSchema.parse)
+      allLocationIds!.map(async locationId => {
+        const body = await this.client.get(`location/${locationId}/sensorAssociations`).then(devicesSchema.parse)
         return body.items
       }),
     )
@@ -175,20 +172,17 @@ export default class LaCrosseAPI {
     return devices.flat()
   }
 
-  async rawWeatherData(device: Device) {
-    const fields = Object.keys(device.sensor.fields || {}).join()
-
+  async rawWeatherData(deviceId: string) {
     // Get data from the last 12 hours
     const from = Date.now() - 12 * 60 * 60 * 1000
 
-    const userDevice = `ref.user-device.${device.id}`
+    const userDevice = `ref.user-device.${deviceId}`
     const aggregates = 'ai.ticks.1'
 
     const data = await this.client
       .get(`device-association/${userDevice}/feed`, {
         prefixUrl: 'https://ingv2.lacrossetechnology.com/api/v1.1/active-user',
         searchParams: {
-          fields,
           from: Math.floor(from / 1000),
           aggregates,
           types: 'spot',
@@ -203,8 +197,9 @@ export default class LaCrosseAPI {
     return data[userDevice][aggregates]
   }
 
-  async getDeviceWeatherData(device: Device) {
-    const data = await this.rawWeatherData(device)
+  @formatError
+  async getDeviceWeatherData(deviceId: string) {
+    const data = await this.rawWeatherData(deviceId)
 
     const dataFields = data?.fields
 
@@ -237,4 +232,30 @@ function convertToCelcius(temperature?: Temperature) {
   }
 
   throw new Error(`Unit ${temperature.unit} cannot be converted to celcius`)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function formatError<This, Args extends any[], Return>(target: (this: This, ...args: Args) => Promise<Return>) {
+  async function replacementMethod(this: This, ...args: Args) {
+    try {
+      const result = await target.call(this, ...args)
+      return result
+    } catch (e: unknown) {
+      throw handleError(e)
+    }
+  }
+
+  return replacementMethod
+}
+
+function handleError(error: unknown) {
+  if (error instanceof HTTPError) {
+    return new Error(error.response.body?.error?.message || error.response.body?.error, { cause: error })
+  } else if (error instanceof RequestError) {
+    return new Error(error.response?.body?.error?.message || error.response?.body?.error.message, { cause: error })
+  } else if (error instanceof Error) {
+    return new Error(error.message, { cause: error })
+  }
+
+  return new Error('Unknown error', { cause: error })
 }

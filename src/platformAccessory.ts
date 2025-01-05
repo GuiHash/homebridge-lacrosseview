@@ -79,7 +79,7 @@ export class Accessory {
     try {
       this.log.debug(`[%s] lacrosse.getWeatherData(%s)`, this.accessory.displayName, this.accessory.context.device)
 
-      const { humidity, temperature } = await this.lacrosse.getDeviceWeatherData(this.accessory.context.device)
+      const { humidity, temperature } = await this.lacrosse.getDeviceWeatherData(this.accessory.context.device.id)
 
       if (humidity && this.humiditySensorService) {
         this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
@@ -101,7 +101,7 @@ export class Accessory {
         })
       }
     } catch (e) {
-      this.log.error('[%s] %s', this.accessory.displayName, e)
+      this.log.error(`[${this.accessory.displayName}] Updating accessory`, e)
       if (this.humiditySensorService) {
         this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 0)
       }

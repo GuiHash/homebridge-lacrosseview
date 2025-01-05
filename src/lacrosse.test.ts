@@ -199,42 +199,7 @@ test('get all devices', async () => {
 test('get device weather data', async () => {
   const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
 
-  await expect(
-    lacrosse.getDeviceWeatherData({
-      id: 'a-device-id',
-      modifiedOn: '2021-01-23T20:24:12.708Z',
-      createdOn: '2021-01-23T20:24:12.708Z',
-      shallow: false,
-      weight: '0',
-      flaggedForSynchVNext: true,
-      name: 'Device',
-      sensor: {
-        id: 'a-sensor-id',
-        type: {
-          id: '5758531941433344',
-          shallow: false,
-          category: 10,
-          name: 'WS6862BLA FRANCE',
-          internalName: 'WS6862BLA',
-          description: 'C83100 FOR FRANCE UPLOAD PRESSURE',
-          image:
-            'https://firebasestorage.googleapis.com/v0/b/lax-gateway.appspot.com/o/images%2FWS6862BLA.png?alt=media',
-        },
-        series: 'V2',
-        serial: 'serial',
-        fields: {
-          Temperature: 1,
-          notSupported: 0,
-          BarometricPressure: 24,
-          Humidity: 2,
-          HeatIndex: 6,
-        },
-      },
-      sensorId: 'a-sensor-id',
-      locationId: 'a-location-id',
-      ownerId: 'an-owner-id',
-    }),
-  ).resolves.toStrictEqual({
+  await expect(lacrosse.getDeviceWeatherData('a-device-id')).resolves.toStrictEqual({
     barometricPressure: 1033,
     heatIndex: 16.500000000000004,
     humidity: 69,
