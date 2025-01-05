@@ -26,26 +26,7 @@ test('throw an error if invalid email', async () => {
 
   const lacrosse = new LaCrosseAPI('an-invalid-email@example.local', 'password')
 
-  await expect(() => lacrosse.getLocations()).rejects.toMatchObject({
-    name: 'HTTPError',
-    response: {
-      statusCode: 400,
-      statusMessage: 'Bad Request',
-      body: {
-        error: {
-          code: 400,
-          message: 'EMAIL_NOT_FOUND',
-          errors: [
-            {
-              message: 'EMAIL_NOT_FOUND',
-              domain: 'global',
-              reason: 'invalid',
-            },
-          ],
-        },
-      },
-    },
-  })
+  await expect(() => lacrosse.getLocations()).rejects.toThrowError(new Error('EMAIL_NOT_FOUND'))
 })
 
 test('throw an error if invalid password', async () => {
@@ -71,26 +52,7 @@ test('throw an error if invalid password', async () => {
   )
   const lacrosse = new LaCrosseAPI('an-email@example.local', 'invalid-password')
 
-  await expect(() => lacrosse.getLocations()).rejects.toMatchObject({
-    name: 'HTTPError',
-    response: {
-      statusCode: 400,
-      statusMessage: 'Bad Request',
-      body: {
-        error: {
-          code: 400,
-          message: 'INVALID_PASSWORD',
-          errors: [
-            {
-              message: 'INVALID_PASSWORD',
-              domain: 'global',
-              reason: 'invalid',
-            },
-          ],
-        },
-      },
-    },
-  })
+  await expect(() => lacrosse.getLocations()).rejects.toThrowError(new Error('INVALID_PASSWORD'))
 })
 
 test('get all locations', async () => {
