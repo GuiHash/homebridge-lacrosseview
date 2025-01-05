@@ -13,12 +13,12 @@
         "types": [
           { "type": "feat", "section": "Features" },
           { "type": "fix", "section": "Bug Fixes" },
-          { "type": "chore", "section": "Chore" },
+          { "type": "chore", "hidden": true, "section": "Chore" },
           { "type": "docs", "section": "Documentations" },
           { "type": "style", "hidden": true },
-          { "type": "refactor", "section": "Refactor" },
+          { "type": "refactor","hidden": true,  "section": "Refactor" },
           { "type": "perf", "section": "Performances" },
-          { "type": "test", "section": "Tests" }
+          { "type": "test", "hidden": true,  "section": "Tests" }
         ]
       }
     }],
