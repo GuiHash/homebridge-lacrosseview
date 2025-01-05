@@ -34,56 +34,56 @@ const locationsSchema = z.object({
   ),
 })
 
-const devicesSchema = z.object({
-  items: z.array(
-    z
+export const deviceSchema = z
+  .object({
+    id: z.string(),
+    modifiedOn: z.string().optional(),
+    createdOn: z.string().optional(),
+    shallow: z.boolean().optional(),
+    weight: z.string().optional(),
+    flaggedForSynchVNext: z.boolean().optional(),
+    name: z.string(),
+    sensor: z
       .object({
         id: z.string(),
         modifiedOn: z.string().optional(),
         createdOn: z.string().optional(),
         shallow: z.boolean().optional(),
-        weight: z.string().optional(),
-        flaggedForSynchVNext: z.boolean().optional(),
-        name: z.string(),
-        sensor: z
+        type: z
           .object({
-            id: z.string(),
-            modifiedOn: z.string().optional(),
-            createdOn: z.string().optional(),
+            id: z.string().optional().optional(),
             shallow: z.boolean().optional(),
-            type: z
-              .object({
-                id: z.string().optional().optional(),
-                shallow: z.boolean().optional(),
-                category: z.number().optional(),
-                name: z.string(),
-                internalName: z.string().optional(),
-                description: z.string().optional(),
-                image: z.string().optional(),
-              })
-              .passthrough(),
-            series: z.string().optional(),
-            serial: z.string(),
-            fields: z
-              .object({
-                notSupported: z.number().optional(),
-                Temperature: z.number().optional(),
-                Humidity: z.number().optional(),
-                HeatIndex: z.number().optional(),
-                BarometricPressure: z.number().optional(),
-              })
-              .passthrough()
-              .optional(),
             category: z.number().optional(),
-            sensorTypeEntityId: z.string().optional(),
+            name: z.string(),
+            internalName: z.string().optional(),
+            description: z.string().optional(),
+            image: z.string().optional(),
           })
           .passthrough(),
-        sensorId: z.string().optional(),
-        locationId: z.string(),
-        ownerId: z.string().optional(),
+        series: z.string().optional(),
+        serial: z.string(),
+        fields: z
+          .object({
+            notSupported: z.number().optional(),
+            Temperature: z.number().optional(),
+            Humidity: z.number().optional(),
+            HeatIndex: z.number().optional(),
+            BarometricPressure: z.number().optional(),
+          })
+          .passthrough()
+          .optional(),
+        category: z.number().optional(),
+        sensorTypeEntityId: z.string().optional(),
       })
       .passthrough(),
-  ),
+    sensorId: z.string().optional(),
+    locationId: z.string(),
+    ownerId: z.string().optional(),
+  })
+  .passthrough()
+
+const devicesSchema = z.object({
+  items: z.array(deviceSchema),
 })
 
 const dataSchema = z.object({
@@ -159,11 +159,10 @@ export default class LaCrosseAPI {
 
   @formatError
   async getDevices(locationIds?: string[]) {
-    const allLocationIds =
-      locationIds ?? (await this.getLocations().then(locations => locations.map(location => location.id)))
+    const allLocationIds = await this.getLocations().then(locations => locations.map(location => location.id))
 
     const devices = await Promise.all(
-      allLocationIds!.map(async locationId => {
+      (locationIds || allLocationIds).map(async locationId => {
         const body = await this.client.get(`location/${locationId}/sensorAssociations`).then(devicesSchema.parse)
         return body.items
       }),

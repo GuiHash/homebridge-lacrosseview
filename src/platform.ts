@@ -1,11 +1,20 @@
-import type { API, DynamicPlatformPlugin, Logger, PlatformConfig, Service, Characteristic } from 'homebridge'
+import type {
+  API,
+  DynamicPlatformPlugin,
+  Logger,
+  PlatformConfig,
+  Service,
+  Characteristic,
+  PlatformAccessory,
+} from 'homebridge'
 import fakegato from 'fakegato-history'
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js'
 import {
   Accessory,
   isCompatibleDevice,
-  type PlatformAccessoryWithContext as PlatformAccessory,
+  type PlatformAccessoryWithContext,
+  assertPlatformAccessory,
 } from './platformAccessory.js'
 
 import LaCrosseAPI from './lacrosse.js'
@@ -60,7 +69,8 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
   public readonly FakeGatoHistoryService
 
   // this is used to track restored cached accessories
-  public readonly accessories: PlatformAccessory[] = []
+  public readonly accessories: Map<string, PlatformAccessoryWithContext> = new Map()
+  public readonly discoveredCacheUUIDs: string[] = []
 
   constructor(
     public readonly log: Logger,
@@ -93,61 +103,36 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
    * It should be used to setup event handlers for characteristics and update respective values.
    */
   configureAccessory(accessory: PlatformAccessory) {
-    this.log.info(
-      `Loading accessory from cache: [%s] [id: %s] [uuid: %s]`,
-      accessory.displayName,
-      accessory.context.device.id,
-      accessory.UUID,
-    )
+    try {
+      this.log.info(
+        `Loading accessory from cache: [%s] [id: %s] [uuid: %s]`,
+        accessory.displayName,
+        accessory.context.device.id,
+        accessory.UUID,
+      )
 
-    new Accessory(this, accessory)
+      assertPlatformAccessory(accessory)
 
-    // add the restored accessory to the accessories cache so we can track if it has already been registered
-    this.accessories.push(accessory)
+      // add the restored accessory to the accessories cache, so we can track if it has already been registered
+      this.accessories.set(accessory.UUID, accessory)
+    } catch (e) {
+      this.log.error('Configuring accessory', e)
+    }
   }
 
   async discoverDevices() {
     try {
       this.log.info('Discovering devices')
-      const allDevices = await this.lacrosse.getDevices()
-      const locations = [...new Set(allDevices.map(device => `id: ${device.locationId}`))]
-      this.log.debug(`Found ${locations.length} locations [${locations.join(', ')}]`)
-      const devices = allDevices
-        .filter(device => {
-          if (this.shouldIncludeDevice(device)) {
-            return true
-          }
-          this.log.debug(`Ignoring discovered device excluded by configuration: [%s] [id: %s]`, device.name, device.id)
-          return false
-        })
-        .filter(device => {
-          if (isCompatibleDevice(device)) {
-            return true
-          }
-          this.lacrosse
-            .rawWeatherData(device.id)
-            .then(data => {
-              this.log.info(
-                'Ignoring discovered device excluded by incompatibility: [%s] [id: %s]',
-                device.name,
-                device.id,
-              )
-              this.log.info(
-                'Please consider restarting homebridge in debug mode and opening an issue on github with the debug informations printed',
-              )
-              this.log.debug(`Device data %s`, JSON.stringify(device, null, 1))
-              this.log.debug(`Raw weather data %s`, JSON.stringify(data, null, 1))
-              this.log.info(
-                'If you want to hide this message, add device [%s] to `devicesToExclude` configuration',
-                device.id,
-              )
-            })
-            .catch(e => this.log.error('Error while getting incompatible device data', e))
-        })
 
+      const devices = await this.getDevices()
+
+      // loop over the discovered devices and register each one if it has not already been registered
       for (const device of devices) {
         const uuid = this.api.hap.uuid.generate(device.id)
-        const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid)
+
+        // see if an accessory with the same uuid has already been registered and restored from
+        // the cached devices we stored in the `configureAccessory` method above
+        const existingAccessory = this.accessories.get(uuid)
 
         if (existingAccessory) {
           // the accessory already exists
@@ -158,63 +143,88 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
             uuid,
           )
 
-          // Update context accessory
-          existingAccessory.context.device = device
-          if (existingAccessory.displayName !== device.name) {
-            this.log.debug(
-              '[%s] Rename Accessory to %s [id: %s] [uuid: %s]',
-              existingAccessory.displayName,
-              device.name,
-              device.id,
-              uuid,
-            )
-            existingAccessory.displayName = device.name
-          }
+          // if you need to update the accessory.context then you should run `api.updatePlatformAccessories`. e.g.:
+          // existingAccessory.context.device = device;
+          // this.api.updatePlatformAccessories([existingAccessory]);
 
-          // update accessory cache with any changes to the accessory details and information
-          this.api.updatePlatformAccessories([existingAccessory])
+          // create the accessory handler for the restored accessory
+          // this is imported from `platformAccessory.ts`
+          new Accessory(this, existingAccessory)
         } else {
           // the accessory does not yet exist, so we need to create it
           this.log.info('Adding new accessory: %s [id: %s] [uuid: %s]', device.name, device.id, uuid)
 
           // create a new accessory
-          const accessory = new this.api.platformAccessory<PlatformAccessory['context']>(device.name, uuid)
+          const accessory = new this.api.platformAccessory(device.name, uuid)
 
           // store a copy of the device object in the `accessory.context`
           // the `context` property can be used to store any data about the accessory you may need
           accessory.context.device = device
 
+          assertPlatformAccessory(accessory)
           // create the accessory handler for the newly create accessory
           // this is imported from `platformAccessory.ts`
           new Accessory(this, accessory)
 
           // link the accessory to your platform
           this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory])
-          this.accessories.push(accessory)
         }
+
+        // push into discoveredCacheUUIDs
+        this.discoveredCacheUUIDs.push(uuid)
       }
 
-      for (const accessory of this.accessories) {
-        const existingDevice = devices.find(device => {
-          const uuid = this.api.hap.uuid.generate(device.id)
-          return accessory.UUID === uuid
-        })
-
-        if (!existingDevice) {
-          // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
-          // remove platform accessories when no longer present
-          this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory])
+      for (const [uuid, accessory] of this.accessories) {
+        if (!this.discoveredCacheUUIDs.includes(uuid)) {
           this.log.debug(
             'Removing existing accessory: %s [id: %s] [uuid: %s]',
             accessory.displayName,
             accessory.context.device.id,
             accessory.UUID,
           )
+          this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory])
         }
       }
     } catch (e) {
       this.log.error('Discovering devices', e)
     }
+  }
+
+  private async getDevices() {
+    const allDevices = await this.lacrosse.getDevices()
+
+    return allDevices
+      .filter(device => {
+        if (this.shouldIncludeDevice(device)) {
+          return true
+        }
+        this.log.debug(`Ignoring discovered device excluded by configuration: [%s] [id: %s]`, device.name, device.id)
+        return false
+      })
+      .filter(device => {
+        if (isCompatibleDevice(device)) {
+          return true
+        }
+        this.lacrosse
+          .rawWeatherData(device.id)
+          .then(data => {
+            this.log.info(
+              'Ignoring discovered device excluded by incompatibility: [%s] [id: %s]',
+              device.name,
+              device.id,
+            )
+            this.log.info(
+              'Please consider restarting homebridge in debug mode and opening an issue on github with the debug informations printed',
+            )
+            this.log.debug(`Device data %s`, JSON.stringify(device, null, 1))
+            this.log.debug(`Raw weather data %s`, JSON.stringify(data, null, 1))
+            this.log.info(
+              'If you want to hide this message, add device [%s] to `devicesToExclude` configuration',
+              device.id,
+            )
+          })
+          .catch(e => this.log.error('Error while getting incompatible device data', e))
+      })
   }
 
   private shouldIncludeDevice(device: { id: string; locationId: string }): boolean {
