@@ -1,3 +1,9 @@
+## [2.0.1](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.0.0...v2.0.1) (2025-02-05)
+
+### Bug Fixes
+
+* unreachable lacrosse api endpoint ([#115](https://github.com/GuiHash/homebridge-lacrosseview/issues/115)) ([ab14306](https://github.com/GuiHash/homebridge-lacrosseview/commit/ab143065b32322bc9590e8162b067cbf5447c233))
+
 ## [2.0.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v1.2.0...v2.0.0) (2025-01-05)
 
 ### ⚠ BREAKING CHANGES
