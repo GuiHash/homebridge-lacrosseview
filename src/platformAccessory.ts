@@ -1,4 +1,4 @@
-import type { Service, PlatformAccessory, Logger } from 'homebridge'
+import { type Service, type PlatformAccessory, type Logger } from 'homebridge'
 import LaCrosseAPI, { deviceSchema } from './lacrosse.js'
 
 import { LaCrosseViewPlatform } from './platform.js'
@@ -16,6 +16,7 @@ export type PlatformAccessoryWithContext = PlatformAccessory<{ device: Device }>
 export class Accessory {
   private temperatureSensorService?: Service
   private humiditySensorService?: Service
+  private batterySensorService: Service
   private fakeGatoHistoryService?
   private lacrosse: LaCrosseAPI
   private log: Logger
@@ -59,6 +60,9 @@ export class Accessory {
       this.humiditySensorService.setCharacteristic(platform.Characteristic.StatusActive, 0)
     }
 
+    this.batterySensorService =
+      accessory.getService(this.platform.Service.Battery) || this.accessory.addService(this.platform.Service.Battery)
+
     if (platform.config.fakeGatoEnabled) {
       this.fakeGatoHistoryService = new this.platform.FakeGatoHistoryService('weather', accessory, {
         filename: `fakegato-history_${serialNumber}.json`,
@@ -83,7 +87,7 @@ export class Accessory {
         this.accessory.context.device.id,
       )
 
-      const { humidity, temperature } = await this.lacrosse.getDeviceStatus(this.accessory.context.device.id)
+      const { humidity, temperature, battery } = await this.lacrosse.getDeviceStatus(this.accessory.context.device.id)
 
       if (humidity && this.humiditySensorService) {
         this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
@@ -95,6 +99,22 @@ export class Accessory {
         this.temperatureSensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)
         this.temperatureSensorService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, temperature)
         this.log.debug(`[%s] updateCharacteristic [%s] Temperature`, this.accessory.displayName, temperature)
+      }
+
+      if (battery) {
+        this.batterySensorService.updateCharacteristic(this.platform.Characteristic.BatteryLevel, battery)
+        this.log.debug(`[%s] updateCharacteristic [%s] Battery`, this.accessory.displayName, battery)
+        if (battery < 15) {
+          this.batterySensorService.updateCharacteristic(
+            this.platform.Characteristic.StatusLowBattery,
+            this.platform.Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW,
+          )
+        } else {
+          this.batterySensorService.updateCharacteristic(
+            this.platform.Characteristic.StatusLowBattery,
+            this.platform.Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL,
+          )
+        }
       }
 
       if (this.fakeGatoHistoryService && (humidity || temperature)) {

@@ -101,7 +101,7 @@ const deviceStatusSchema = z
     time_zone: z.string(),
     status: z.object({
       health: z.string(),
-      battery_status: z.string(),
+      battery_status: z.enum(['low', 'charged']).or(z.string()),
       battery_level: z.number(),
     }),
     last_update: z.number(),
