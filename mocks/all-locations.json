@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "id": "a-location-id",
+      "modifiedOn": "2021-01-23T20:24:12.452Z",
+      "createdOn": "2021-01-23T20:24:12.452Z",
+      "shallow": false,
+      "weight": "100",
+      "flaggedForSynchVNext": true,
+      "name": "Home",
+      "ownerId": "an-owner-id"
+    }
+  ]
+}

@@ -1,0 +1,1507 @@
+{
+  "time_zone": "Etc/UTC",
+  "status": {
+    "txn": "auto",
+    "health": "healthy",
+    "channel": 1,
+    "battery_status": "low",
+    "battery_level": 10
+  },
+  "s3_poll": false,
+  "s2_poll": false,
+  "last_update_dt": "2025-02-05T16:49:54.150498Z",
+  "last_update": 1738774194,
+  "data": {
+    "unbound": {
+      "Temperature": {
+        "unit_enum": 4225,
+        "unit": "degrees_celsius",
+        "low": { "value": 14.5, "time": 1738356595, "attributes": {} },
+        "high": { "value": 16.7, "time": 1738493637, "attributes": {} },
+        "data_points": 301,
+        "average": { "value": 15.686710963455148 },
+        "attribute_history": {}
+      },
+      "Humidity": {
+        "unit_enum": 16513,
+        "unit": "relative_humidity",
+        "low": { "value": 50, "time": 1738695442, "attributes": {} },
+        "high": { "value": 68, "time": 1738522190, "attributes": {} },
+        "data_points": 301,
+        "average": { "value": 56.81063122923588 },
+        "attribute_history": {}
+      },
+      "HeatIndex": {
+        "unit_enum": 4098,
+        "unit": "degrees_fahrenheit",
+        "low": { "value": 58.1, "time": 1738356595, "attributes": {} },
+        "high": { "value": 62.06, "time": 1738492910, "attributes": {} },
+        "data_points": 301,
+        "average": { "value": 60.236079734219274 },
+        "attribute_history": {}
+      },
+      "BarometricPressure": {
+        "unit_enum": 32897,
+        "unit": "millibars",
+        "low": { "value": 1022, "time": 1738473474, "attributes": {} },
+        "high": { "value": 1040, "time": null, "attributes": {} },
+        "data_points": 301,
+        "average": { "value": 1025.7408637873755 },
+        "attribute_history": {}
+      }
+    },
+    "current": {
+      "Temperature": {
+        "unit_enum": 4225,
+        "unit": "degrees_celsius",
+        "spot": {
+          "value": 15.600000000000001,
+          "time": 1738774194,
+          "attributes": {}
+        },
+        "data_points": 1
+      },
+      "Humidity": {
+        "unit_enum": 16513,
+        "unit": "relative_humidity",
+        "spot": { "value": 54, "time": 1738774194, "attributes": {} },
+        "data_points": 1
+      },
+      "HeatIndex": {
+        "unit_enum": 4098,
+        "unit": "degrees_fahrenheit",
+        "spot": {
+          "value": 60.08,
+          "time": 1738774194,
+          "attributes": { "out_of_range": -1 }
+        },
+        "data_points": 1
+      },
+      "BarometricPressure": {
+        "unit_enum": 32897,
+        "unit": "millibars",
+        "spot": { "value": 1040, "time": 1738774194, "attributes": {} },
+        "data_points": 1
+      }
+    },
+    "ai.years.1": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.1, "time": 1738652309, "attributes": {} },
+            "high": { "value": 16.7, "time": 1738493637, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 15.76101083032491 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 68, "time": 1738522190, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 56.938628158844764 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.18, "time": 1738652309, "attributes": {} },
+            "high": { "value": 62.06, "time": 1738492910, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 60.36981949458483 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1022, "time": 1738473474, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 1025.5270758122745 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738401633,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-01T09:20:33.326520Z"
+        },
+        "block": {
+          "u_to": 1767225600,
+          "u_from": 1735689600,
+          "to": "2026-01-01T00:00:00.000000Z",
+          "from": "2025-01-01T00:00:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 14.5, "time": 1738356595, "attributes": {} },
+            "high": { "value": 16.7, "time": 1738493637, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 15.686710963455148 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 68, "time": 1738522190, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 56.81063122923588 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 58.1, "time": 1738356595, "attributes": {} },
+            "high": { "value": 62.06, "time": 1738492910, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 60.236079734219274 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1022, "time": 1738473474, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 1025.7408637873755 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738270723,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-01-30T20:58:43.845816Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1707151794,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2024-02-05T16:49:54.150498Z"
+        }
+      }
+    },
+    "ai.weeks.1": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.1, "time": 1738652309, "attributes": {} },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 19,
+            "average": { "value": 15.46315789473684 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 56, "time": 1738750428, "attributes": {} },
+            "data_points": 19,
+            "average": { "value": 53.94736842105263 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.18, "time": 1738652309, "attributes": {} },
+            "high": { "value": 60.08, "time": 1738750428, "attributes": {} },
+            "data_points": 19,
+            "average": { "value": 59.833684210526314 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1029, "time": 1738652309, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 19,
+            "average": { "value": 1037.2105263157894 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738652309,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-04T06:58:29.700751Z"
+        },
+        "block": {
+          "u_to": 1739145600,
+          "u_from": 1738540800,
+          "to": "2025-02-10T00:00:00.000000Z",
+          "from": "2025-02-03T00:00:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 14.5, "time": 1738356595, "attributes": {} },
+            "high": { "value": 16.7, "time": 1738493637, "attributes": {} },
+            "data_points": 300,
+            "average": { "value": 15.687999999999999 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 68, "time": 1738522190, "attributes": {} },
+            "data_points": 300,
+            "average": { "value": 56.806666666666665 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 58.1, "time": 1738356595, "attributes": {} },
+            "high": { "value": 62.06, "time": 1738492910, "attributes": {} },
+            "data_points": 300,
+            "average": { "value": 60.2384 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1022, "time": 1738473474, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 300,
+            "average": { "value": 1025.7366666666667 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738310899,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-01-31T08:08:19.944252Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1738255794,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-01-30T16:49:54.000000Z"
+        }
+      }
+    },
+    "ai.months.1": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.1, "time": 1738652309, "attributes": {} },
+            "high": { "value": 16.7, "time": 1738493637, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 15.76101083032491 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 68, "time": 1738522190, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 56.938628158844764 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.18, "time": 1738652309, "attributes": {} },
+            "high": { "value": 62.06, "time": 1738492910, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 60.36981949458483 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1022, "time": 1738473474, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 277,
+            "average": { "value": 1025.5270758122745 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738401633,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-01T09:20:33.326520Z"
+        },
+        "block": {
+          "u_to": 1740787200,
+          "u_from": 1738368000,
+          "to": "2025-03-01T00:00:00.000000Z",
+          "from": "2025-02-01T00:00:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 14.5, "time": 1738356595, "attributes": {} },
+            "high": { "value": 16.7, "time": 1738493637, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 15.686710963455148 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 68, "time": 1738522190, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 56.81063122923588 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 58.1, "time": 1738356595, "attributes": {} },
+            "high": { "value": 62.06, "time": 1738492910, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 60.236079734219274 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1022, "time": 1738473474, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 301,
+            "average": { "value": 1025.7408637873755 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738270723,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-01-30T20:58:43.845816Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1736095794,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-01-05T16:49:54.150498Z"
+        }
+      }
+    },
+    "ai.minutes.5": {
+      "trail": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738771869, "attributes": {} },
+            "high": { "value": 15.5, "time": 1738771869, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 15.5 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738771869, "attributes": {} },
+            "high": { "value": 54, "time": 1738771869, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 59.9,
+              "time": 1738771869,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 59.9,
+              "time": 1738771869,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 59.9 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738771869, "attributes": {} },
+            "high": { "value": 1040, "time": 1738771869, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738771869,
+          "u_from": 1738771869,
+          "to": "2025-02-05T16:11:09.258089Z",
+          "from": "2025-02-05T16:11:09.258089Z"
+        },
+        "block": {
+          "u_to": 1738772100,
+          "u_from": 1738771800,
+          "to": "2025-02-05T16:15:00.000000Z",
+          "from": "2025-02-05T16:10:00.000000Z"
+        }
+      },
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774200,
+          "u_from": 1738773900,
+          "to": "2025-02-05T16:50:00.000000Z",
+          "from": "2025-02-05T16:45:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1738773894,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:44:54.000000Z"
+        }
+      }
+    },
+    "ai.minutes.30": {
+      "trail": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738771674, "attributes": {} },
+            "high": { "value": 15.5, "time": 1738771674, "attributes": {} },
+            "data_points": 2,
+            "average": { "value": 15.5 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738771674, "attributes": {} },
+            "high": { "value": 54, "time": 1738771674, "attributes": {} },
+            "data_points": 2,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 59.9,
+              "time": 1738771674,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 59.9,
+              "time": 1738771674,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 2,
+            "average": { "value": 59.9 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "high": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "data_points": 2,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738771869,
+          "u_from": 1738771674,
+          "to": "2025-02-05T16:11:09.258089Z",
+          "from": "2025-02-05T16:07:54.258502Z"
+        },
+        "block": {
+          "u_to": 1738773000,
+          "u_from": 1738771200,
+          "to": "2025-02-05T16:30:00.000000Z",
+          "from": "2025-02-05T16:00:00.000000Z"
+        }
+      },
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774800,
+          "u_from": 1738773000,
+          "to": "2025-02-05T17:00:00.000000Z",
+          "from": "2025-02-05T16:30:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1738772394,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:19:54.000000Z"
+        }
+      }
+    },
+    "ai.minutes.15": {
+      "trail": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738771674, "attributes": {} },
+            "high": { "value": 15.5, "time": 1738771674, "attributes": {} },
+            "data_points": 2,
+            "average": { "value": 15.5 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738771674, "attributes": {} },
+            "high": { "value": 54, "time": 1738771674, "attributes": {} },
+            "data_points": 2,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 59.9,
+              "time": 1738771674,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 59.9,
+              "time": 1738771674,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 2,
+            "average": { "value": 59.9 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "high": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "data_points": 2,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738771869,
+          "u_from": 1738771674,
+          "to": "2025-02-05T16:11:09.258089Z",
+          "from": "2025-02-05T16:07:54.258502Z"
+        },
+        "block": {
+          "u_to": 1738772100,
+          "u_from": 1738771200,
+          "to": "2025-02-05T16:15:00.000000Z",
+          "from": "2025-02-05T16:00:00.000000Z"
+        }
+      },
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774800,
+          "u_from": 1738773900,
+          "to": "2025-02-05T17:00:00.000000Z",
+          "from": "2025-02-05T16:45:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1738773294,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:34:54.000000Z"
+        }
+      }
+    },
+    "ai.minutes.1": {
+      "trail": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738771869, "attributes": {} },
+            "high": { "value": 15.5, "time": 1738771869, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 15.5 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738771869, "attributes": {} },
+            "high": { "value": 54, "time": 1738771869, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 59.9,
+              "time": 1738771869,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 59.9,
+              "time": 1738771869,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 59.9 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738771869, "attributes": {} },
+            "high": { "value": 1040, "time": 1738771869, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738771869,
+          "u_from": 1738771869,
+          "to": "2025-02-05T16:11:09.258089Z",
+          "from": "2025-02-05T16:11:09.258089Z"
+        },
+        "block": {
+          "u_to": 1738771920,
+          "u_from": 1738771860,
+          "to": "2025-02-05T16:12:00.000000Z",
+          "from": "2025-02-05T16:11:00.000000Z"
+        }
+      },
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 1,
+            "average": { "value": 15.600000000000001 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738774194, "attributes": {} },
+            "high": { "value": 54, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 1,
+            "average": { "value": 60.08 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "high": { "value": 1040, "time": 1738774194, "attributes": {} },
+            "data_points": 1,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738774194,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:49:54.150498Z"
+        },
+        "block": {
+          "u_to": 1738774200,
+          "u_from": 1738774140,
+          "to": "2025-02-05T16:50:00.000000Z",
+          "from": "2025-02-05T16:49:00.000000Z"
+        }
+      }
+    },
+    "ai.hours.1": {
+      "trail": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": null, "attributes": {} },
+            "high": { "value": 15.5, "time": null, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 15.5 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": null, "attributes": {} },
+            "high": { "value": 54, "time": null, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.9, "time": null, "attributes": {} },
+            "high": { "value": 59.9, "time": null, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 59.9 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1039, "time": null, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 1039.75 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738769364,
+          "u_from": 1738768449,
+          "to": "2025-02-05T15:29:24.241745Z",
+          "from": "2025-02-05T15:14:09.211265Z"
+        },
+        "block": {
+          "u_to": 1738771200,
+          "u_from": 1738767600,
+          "to": "2025-02-05T16:00:00.000000Z",
+          "from": "2025-02-05T15:00:00.000000Z"
+        }
+      },
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738771674, "attributes": {} },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 3,
+            "average": { "value": 15.533333333333333 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738771674, "attributes": {} },
+            "high": { "value": 54, "time": 1738771674, "attributes": {} },
+            "data_points": 3,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 59.9,
+              "time": 1738771674,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 3,
+            "average": { "value": 59.96 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "high": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "data_points": 3,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738771674,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:07:54.258502Z"
+        },
+        "block": {
+          "u_to": 1738774800,
+          "u_from": 1738771200,
+          "to": "2025-02-05T17:00:00.000000Z",
+          "from": "2025-02-05T16:00:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738771674, "attributes": {} },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 3,
+            "average": { "value": 15.533333333333333 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738771674, "attributes": {} },
+            "high": { "value": 54, "time": 1738771674, "attributes": {} },
+            "data_points": 3,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": {
+              "value": 59.9,
+              "time": 1738771674,
+              "attributes": { "out_of_range": -1 }
+            },
+            "high": {
+              "value": 60.08,
+              "time": 1738774194,
+              "attributes": { "out_of_range": -1 }
+            },
+            "data_points": 3,
+            "average": { "value": 59.96 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "high": { "value": 1040, "time": 1738771674, "attributes": {} },
+            "data_points": 3,
+            "average": { "value": 1040 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738771674,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T16:07:54.258502Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1738770594,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T15:49:54.000000Z"
+        }
+      }
+    },
+    "ai.days.1": {
+      "trail": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.1, "time": 1738652309, "attributes": {} },
+            "high": { "value": 15.2, "time": 1738695442, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 15.149999999999999 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 54, "time": 1738652698, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 51.75 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.18, "time": 1738652309, "attributes": {} },
+            "high": { "value": 59.36, "time": 1738695442, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 59.269999999999996 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1029, "time": 1738652309, "attributes": {} },
+            "high": { "value": 1030, "time": 1738695442, "attributes": {} },
+            "data_points": 4,
+            "average": { "value": 1029.5 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738696657,
+          "u_from": 1738652309,
+          "to": "2025-02-04T19:17:37.051610Z",
+          "from": "2025-02-04T06:58:29.700751Z"
+        },
+        "block": {
+          "u_to": 1738713600,
+          "u_from": 1738627200,
+          "to": "2025-02-05T00:00:00.000000Z",
+          "from": "2025-02-04T00:00:00.000000Z"
+        }
+      },
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.5, "time": 1738744928, "attributes": {} },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 15,
+            "average": { "value": 15.546666666666665 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 54, "time": 1738762307, "attributes": {} },
+            "high": { "value": 56, "time": 1738750428, "attributes": {} },
+            "data_points": 15,
+            "average": { "value": 54.53333333333333 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.9, "time": 1738744928, "attributes": {} },
+            "high": { "value": 60.08, "time": 1738750428, "attributes": {} },
+            "data_points": 15,
+            "average": { "value": 59.984 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1038, "time": 1738745013, "attributes": {} },
+            "high": { "value": 1040, "time": null, "attributes": {} },
+            "data_points": 15,
+            "average": { "value": 1039.2666666666667 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738744928,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T08:42:08.171960Z"
+        },
+        "block": {
+          "u_to": 1738800000,
+          "u_from": 1738713600,
+          "to": "2025-02-06T00:00:00.000000Z",
+          "from": "2025-02-05T00:00:00.000000Z"
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Temperature": {
+            "unit_enum": 4225,
+            "unit": "degrees_celsius",
+            "low": { "value": 15.2, "time": 1738695442, "attributes": {} },
+            "high": {
+              "value": 15.600000000000001,
+              "time": 1738774194,
+              "attributes": {}
+            },
+            "data_points": 17,
+            "average": { "value": 15.505882352941175 },
+            "attribute_history": {}
+          },
+          "Humidity": {
+            "unit_enum": 16513,
+            "unit": "relative_humidity",
+            "low": { "value": 50, "time": 1738695442, "attributes": {} },
+            "high": { "value": 56, "time": 1738750428, "attributes": {} },
+            "data_points": 17,
+            "average": { "value": 54 },
+            "attribute_history": {}
+          },
+          "HeatIndex": {
+            "unit_enum": 4098,
+            "unit": "degrees_fahrenheit",
+            "low": { "value": 59.36, "time": 1738695442, "attributes": {} },
+            "high": { "value": 60.08, "time": 1738750428, "attributes": {} },
+            "data_points": 17,
+            "average": { "value": 59.91058823529412 },
+            "attribute_history": {}
+          },
+          "BarometricPressure": {
+            "unit_enum": 32897,
+            "unit": "millibars",
+            "low": { "value": 1030, "time": 1738695442, "attributes": {} },
+            "high": { "value": 1040, "time": 1738769163, "attributes": {} },
+            "data_points": 17,
+            "average": { "value": 1038.1764705882354 },
+            "attribute_history": {}
+          }
+        },
+        "cover": {
+          "u_to": 1738774194,
+          "u_from": 1738750428,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-05T10:13:48.168421Z"
+        },
+        "block": {
+          "u_to": 1738774194,
+          "u_from": 1738687794,
+          "to": "2025-02-05T16:49:54.150498Z",
+          "from": "2025-02-04T16:49:54.000000Z"
+        }
+      }
+    }
+  },
+  "cached_on": "2025-02-05T18:24:53.801990Z",
+  "alerts": { "triggered?": false, "impacted": {} }
+}
