@@ -158,13 +158,14 @@ test('get all devices', async () => {
   ])
 })
 
-test('get device weather data', async () => {
+test('get device status', async () => {
   const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
 
-  await expect(lacrosse.getDeviceWeatherData('a-device-id')).resolves.toStrictEqual({
-    barometricPressure: 1033,
-    heatIndex: 16.500000000000004,
-    humidity: 69,
-    temperature: 16.5,
+  await expect(lacrosse.getDeviceStatus('a-device-id')).resolves.toStrictEqual({
+    barometricPressure: 1040,
+    battery: 10,
+    heatIndex: 15.6,
+    humidity: 54,
+    temperature: 15.600000000000001,
   })
 })

@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "id": "a-device-id",
+      "modifiedOn": "2021-01-23T20:24:12.708Z",
+      "createdOn": "2021-01-23T20:24:12.708Z",
+      "shallow": false,
+      "weight": "0",
+      "flaggedForSynchVNext": true,
+      "name": "Chambre",
+      "sensor": {
+        "id": "a-sensor-id",
+        "modifiedOn": "2020-07-28T11:44:02.478Z",
+        "createdOn": "2020-07-28T11:44:02.478Z",
+        "shallow": false,
+        "flaggedForSynchVNext": true,
+        "type": {
+          "id": "5758531941433344",
+          "shallow": false,
+          "category": 10,
+          "name": "WS6862BLA FRANCE",
+          "internalName": "WS6862BLA",
+          "description": "C83100 FOR FRANCE UPLOAD PRESSURE",
+          "image": "https://firebasestorage.googleapis.com/v0/b/lax-gateway.appspot.com/o/images%2FWS6862BLA.png?alt=media",
+          "fields": {
+            "Temperature": 1,
+            "notSupported": 0,
+            "BarometricPressure": 24,
+            "Humidity": 2,
+            "HeatIndex": 6
+          }
+        },
+        "series": "V2",
+        "serial": "serial",
+        "controlCode": 1,
+        "verificationCode": "ap7",
+        "geo": {
+          "anonymous": false,
+          "zip": "",
+          "timezone": "America/",
+          "countryCode": "US"
+        },
+        "attributes": {
+          "factory": "14",
+          "Composite": "0",
+          "display": "1",
+          "data-stream": "1",
+          "device-glyph": "20"
+        },
+        "fields": {
+          "Temperature": 1,
+          "notSupported": 0,
+          "BarometricPressure": 24,
+          "Humidity": 2,
+          "HeatIndex": 6
+        },
+        "permissions": {
+          "owner": true,
+          "read": true,
+          "subscribe": true,
+          "claim": true,
+          "admin": true,
+          "share": true,
+          "admin.geo": true,
+          "admin.smartview": true
+        },
+        "linkedSensors": [
+          {
+            "identifier": "auto",
+            "type": "0",
+            "sensorId": "a-sensor-id"
+          }
+        ],
+        "category": 10,
+        "sensorTypeEntityId": "5758531941433344"
+      },
+      "sensorId": "a-sensor-id",
+      "locationId": "a-location-id",
+      "ownerId": "an-owner-id"
+    }
+  ]
+}

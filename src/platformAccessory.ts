@@ -77,9 +77,13 @@ export class Accessory {
 
   async updateDataSensors() {
     try {
-      this.log.debug(`[%s] lacrosse.getWeatherData("%s")`, this.accessory.displayName, this.accessory.context.device.id)
+      this.log.debug(
+        `[%s] lacrosse.getDeviceStatus("%s")`,
+        this.accessory.displayName,
+        this.accessory.context.device.id,
+      )
 
-      const { humidity, temperature } = await this.lacrosse.getDeviceWeatherData(this.accessory.context.device.id)
+      const { humidity, temperature } = await this.lacrosse.getDeviceStatus(this.accessory.context.device.id)
 
       if (humidity && this.humiditySensorService) {
         this.humiditySensorService.updateCharacteristic(this.platform.Characteristic.StatusActive, 1)

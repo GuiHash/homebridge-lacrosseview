@@ -206,7 +206,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
           return true
         }
         this.lacrosse
-          .rawWeatherData(device.id)
+          .getRawDeviceStatus(device.id)
           .then(data => {
             this.log.info(
               'Ignoring discovered device excluded by incompatibility: [%s] [id: %s]',

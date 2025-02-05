@@ -26,7 +26,6 @@ const locationsSchema = z.object({
         createdOn: z.string().optional(),
         shallow: z.boolean().optional(),
         weight: z.string().optional(),
-        flaggedForSynchVNext: z.boolean().optional(),
         name: z.string().optional(),
         ownerId: z.string().optional(),
       })
@@ -87,24 +86,35 @@ const devicesSchema = z.object({
 })
 
 const dataSchema = z.object({
-  values: z.array(z.object({ u: z.number(), s: z.number() })),
   unit_enum: z.number(),
   unit: z.enum(['degrees_celsius', 'degrees_fahrenheit', 'relative_humidity', 'millibars']),
+  spot: z.object({
+    value: z.number(),
+    time: z.number(),
+    attributes: z.object({}),
+  }),
+  data_points: z.number(),
 })
 
-const rawWeatherDataSchema = z.record(
-  z.string(),
-  z.object({
-    'ai.ticks.1': z.object({
-      fields: z.object({
+const deviceStatusSchema = z
+  .object({
+    time_zone: z.string(),
+    status: z.object({
+      health: z.string(),
+      battery_status: z.string(),
+      battery_level: z.number(),
+    }),
+    last_update: z.number(),
+    data: z.object({
+      current: z.object({
         Temperature: dataSchema.optional(),
         Humidity: dataSchema.optional(),
         HeatIndex: dataSchema.optional(),
         BarometricPressure: dataSchema.optional(),
       }),
     }),
-  }),
-)
+  })
+  .passthrough()
 
 async function getToken(email: string, password: string) {
   const token = cache.get('idToken')
@@ -129,7 +139,7 @@ async function getToken(email: string, password: string) {
   return idToken
 }
 
-type Temperature = z.infer<typeof rawWeatherDataSchema>[string]['ai.ticks.1']['fields']['Temperature']
+type Temperature = z.infer<typeof deviceStatusSchema>['data']['current']['Temperature']
 
 export default class LaCrosseAPI {
   private client: Got
@@ -139,6 +149,9 @@ export default class LaCrosseAPI {
       prefixUrl: 'https://lax-gateway.appspot.com/_ah/api/lacrosseClient/v1.1/active-user',
       responseType: 'json',
       resolveBodyOnly: true,
+      headers: {
+        'User-Agent': 'okhttp/5.0.0-alpha.11',
+      },
       hooks: {
         beforeRequest: [
           async options => {
@@ -171,53 +184,28 @@ export default class LaCrosseAPI {
     return devices.flat()
   }
 
-  async rawWeatherData(deviceId: string) {
-    // Get data from the last 12 hours
-    const from = Date.now() - 12 * 60 * 60 * 1000
-
+  async getRawDeviceStatus(deviceId: string): Promise<unknown> {
     const userDevice = `ref.user-device.${deviceId}`
-    const aggregates = 'ai.ticks.1'
 
-    const data = await this.client
-      .get(`device-association/${userDevice}/feed`, {
-        prefixUrl: 'https://ingv2.lacrossetechnology.com/api/v1.1/active-user',
-        searchParams: {
-          from: Math.floor(from / 1000),
-          aggregates,
-          types: 'spot',
-        },
-      })
-      .then(rawWeatherDataSchema.parse)
+    const response = await this.client.get(`active-user/device-association/${userDevice}/status`, {
+      prefixUrl: 'https://ingv2.lacrossetechnology.com/api/v1.1',
+    })
 
-    if (!data[userDevice]) {
-      throw new Error(`No data for device ${userDevice}`)
-    }
-
-    return data[userDevice][aggregates]
+    return response
   }
 
-  @formatError
-  async getDeviceWeatherData(deviceId: string) {
-    const data = await this.rawWeatherData(deviceId)
-
-    const dataFields = data?.fields
-
-    const valuesTemperature = convertToCelcius(dataFields?.Temperature)?.values
-    const valuesHunidity = dataFields?.Humidity?.values
-    const valuesHeatIndex = convertToCelcius(dataFields?.HeatIndex)?.values
-    const valuesBarometricPressure = dataFields?.BarometricPressure?.values
+  async getDeviceStatus(deviceId: string) {
+    const response = await this.getRawDeviceStatus(deviceId).then(deviceStatusSchema.parse)
+    const data = response.data.current
 
     return {
-      humidity: getLastValue(valuesHunidity),
-      temperature: getLastValue(valuesTemperature),
-      barometricPressure: getLastValue(valuesBarometricPressure),
-      heatIndex: getLastValue(valuesHeatIndex),
+      temperature: convertToCelcius(data.Temperature)?.spot.value,
+      humidity: data.Humidity?.spot.value,
+      heatIndex: convertToCelcius(data.HeatIndex)?.spot.value,
+      barometricPressure: data.BarometricPressure?.spot.value,
+      battery: response.status.battery_level,
     }
   }
-}
-
-function getLastValue(values?: { u: number; s: number }[]): number | undefined {
-  return values?.pop()?.s
 }
 
 function convertToCelcius(temperature?: Temperature) {
@@ -226,7 +214,7 @@ function convertToCelcius(temperature?: Temperature) {
     return temperature
   }
   if (temperature.unit === 'degrees_fahrenheit') {
-    temperature.values = temperature.values.map(({ u, s }) => ({ u, s: (s - 32) * (5 / 9) }))
+    temperature.spot.value = (temperature.spot.value - 32) * (5 / 9)
     return temperature
   }
 
