@@ -1,3 +1,9 @@
+## [2.1.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.0.1...v2.1.0) (2025-02-05)
+
+### Features
+
+* add battery information ([#116](https://github.com/GuiHash/homebridge-lacrosseview/issues/116)) ([60311f8](https://github.com/GuiHash/homebridge-lacrosseview/commit/60311f800bae1d7d62f82a5e02448207e51aee4c))
+
 ## [2.0.1](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.0.0...v2.0.1) (2025-02-05)
 
 ### Bug Fixes
