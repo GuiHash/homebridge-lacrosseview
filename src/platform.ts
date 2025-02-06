@@ -19,6 +19,8 @@ import {
 
 import LaCrosseAPI from './lacrosse.js'
 
+import util from 'node:util'
+
 interface LaCrosseViewConfig extends PlatformConfig {
   password: string
   email: string
@@ -81,7 +83,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     this.Characteristic = this.api.hap.Characteristic
     this.config = generateConfig(config)
     this.FakeGatoHistoryService = fakegato(this.api)
-    this.lacrosse = new LaCrosseAPI(this.config.email, this.config.password)
+    this.lacrosse = new LaCrosseAPI(this.config.email, this.config.password, this.log)
     this.log.debug('Finished initializing platform: %s', this.config.platform)
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
@@ -216,8 +218,8 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
             this.log.info(
               'Please consider restarting homebridge in debug mode and opening an issue on github with the debug informations printed',
             )
-            this.log.debug(`Device data %s`, JSON.stringify(device, null, 1))
-            this.log.debug(`Raw weather data %s`, JSON.stringify(data, null, 1))
+            this.log.debug(`Device data %s`, util.inspect(device, { depth: null }))
+            this.log.debug(`Raw weather data %s`, util.inspect(data, { depth: null }))
             this.log.info(
               'If you want to hide this message, add device [%s] to `devicesToExclude` configuration',
               device.id,
