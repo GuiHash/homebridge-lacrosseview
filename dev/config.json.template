@@ -1,0 +1,20 @@
+{
+  "bridge": {
+    "name": "PluginTemplate",
+    "username": "AA:BB:CC:DD:EE:FF",
+    "port": 51826,
+    "pin": "031-45-154"
+  },
+  "description": "HomeBridge HTTP Status Control",
+  "plugins": ["homebridge-lacrosseview"],
+  "platforms": [
+    {
+      "email": "example@domain.local",
+      "password": "password",
+      "pollingInterval": 30,
+      "fakeGatoEnabled": true,
+      "platform": "LaCrosseView"
+    }
+  ],
+  "accessories": []
+}
