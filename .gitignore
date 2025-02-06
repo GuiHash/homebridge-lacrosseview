@@ -35,5 +35,5 @@ node_modules/
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
-!dev/config.json
+!dev/config.json.template
 dev/
