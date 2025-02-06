@@ -13,7 +13,7 @@ Any La Crosse Technology **temperature** or **humidity** sensor compatible with 
 ## Requirements
 
 - a La Crosse View account ([iOS](https://apps.apple.com/app/la-crosse-view/id1006925791), [android](https://play.google.com/store/apps/details?id=com.lacrosseview.app))
-- [compatible sensor](#Compatible%20sensors) added to La Crosse View account
+- [compatible sensor](#compatible%20sensors) added to La Crosse View account
 
 ## Installation
 
