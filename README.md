@@ -85,6 +85,18 @@ If you have a La Crosse View sensor that is not yet supported by this plugin you
 1. Run homebridge in [debug mode](https://github.com/homebridge/homebridge/wiki/Basic-Troubleshooting#debug-mode) 
 2. Create a [new issue](https://github.com/GuiHash/homebridge-lacrosseview/issues/new) and post your homebridge logs.
 
+## Development
+
+```bash
+cp dev/config.json.template dev/config.json
+# Replace `email` / `password` by your own lacrossview information
+
+npm install
+
+npm run watch
+```
+
+
 ## Acknowledgements
 
 - Keith Prickett and Stuart Kuredjian for the original code to access La Crossse View API:
