@@ -1,3 +1,5 @@
+## [2.1.1](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.1.0...v2.1.1) (2025-02-06)
+
 ## [2.1.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.0.1...v2.1.0) (2025-02-05)
 
 ### Features
