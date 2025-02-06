@@ -54,6 +54,7 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "homebridge": "^2.0.0-beta.0",
+    "jiti": "^2.4.2",
     "msw": "^2.7.0",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
