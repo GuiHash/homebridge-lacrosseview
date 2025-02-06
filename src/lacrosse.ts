@@ -1,6 +1,7 @@
 import got, { type Got, HTTPError, RequestError } from 'got'
 import { LRUCache } from 'lru-cache'
-import { z } from 'zod'
+import { z, ZodError } from 'zod'
+import util from 'node:util'
 
 const cache = new LRUCache({ max: 1 })
 
@@ -116,6 +117,17 @@ const deviceStatusSchema = z
   })
   .passthrough()
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyParams = any[]
+
+type Logger = {
+  info: (message: string, ...parameters: AnyParams) => void
+  success: (message: string, ...parameters: AnyParams) => void
+  warn: (message: string, ...parameters: AnyParams) => void
+  error: (message: string, ...parameters: AnyParams) => void
+  debug: (message: string, ...parameters: AnyParams) => void
+}
+
 async function getToken(email: string, password: string) {
   const token = cache.get('idToken')
 
@@ -143,8 +155,10 @@ type Temperature = z.infer<typeof deviceStatusSchema>['data']['current']['Temper
 
 export default class LaCrosseAPI {
   private client: Got
+  private log: Logger
 
-  constructor(email: string, password: string) {
+  constructor(email: string, password: string, log: Logger) {
+    this.log = log
     this.client = got.extend({
       prefixUrl: 'https://lax-gateway.appspot.com/_ah/api/lacrosseClient/v1.1/active-user',
       responseType: 'json',
@@ -157,6 +171,30 @@ export default class LaCrosseAPI {
           async options => {
             const token = await getToken(email, password)
             options.headers['Authorization'] = `Bearer ${token}`
+          },
+        ],
+        afterResponse: [
+          response => {
+            this.log.debug(
+              'Request %s',
+              util.inspect(
+                {
+                  method: response.request.options.method,
+                  url: response.request.requestUrl?.toString(),
+                  request: {
+                    headers: response.request.options.headers,
+                    body: response.request.options.body,
+                  },
+                  response: {
+                    status: response.statusCode,
+                    headers: response.headers,
+                    body: response.body,
+                  },
+                },
+                { depth: null },
+              ),
+            )
+            return response
           },
         ],
       },
@@ -221,8 +259,7 @@ function convertToCelcius(temperature?: Temperature) {
   throw new Error(`Unit ${temperature.unit} cannot be converted to celcius`)
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function formatError<This, Args extends any[], Return>(target: (this: This, ...args: Args) => Promise<Return>) {
+function formatError<This, Args extends AnyParams, Return>(target: (this: This, ...args: Args) => Promise<Return>) {
   async function replacementMethod(this: This, ...args: Args) {
     try {
       const result = await target.call(this, ...args)
@@ -236,7 +273,9 @@ function formatError<This, Args extends any[], Return>(target: (this: This, ...a
 }
 
 function handleError(error: unknown) {
-  if (error instanceof HTTPError) {
+  if (error instanceof ZodError) {
+    return new Error('Error while validating LaCrosse API response', { cause: error })
+  } else if (error instanceof HTTPError) {
     return new Error(error.response.body?.error?.message || error.response.body?.error, { cause: error })
   } else if (error instanceof RequestError) {
     return new Error(error.response?.body?.error?.message || error.response?.body?.error.message, { cause: error })
