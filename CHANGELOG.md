@@ -1,3 +1,9 @@
+## [2.1.2](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.1.1...v2.1.2) (2025-02-07)
+
+### Bug Fixes
+
+* locations without sensors/devices ([#120](https://github.com/GuiHash/homebridge-lacrosseview/issues/120)) ([e01b16a](https://github.com/GuiHash/homebridge-lacrosseview/commit/e01b16ad078d6c8274c551d293d7f159bcb47a68))
+
 ## [2.1.1](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.1.0...v2.1.1) (2025-02-06)
 
 ## [2.1.0](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.0.1...v2.1.0) (2025-02-05)
