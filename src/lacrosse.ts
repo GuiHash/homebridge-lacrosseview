@@ -83,7 +83,12 @@ export const deviceSchema = z
   .passthrough()
 
 const devicesSchema = z.object({
-  items: z.array(deviceSchema),
+  items: z
+    .array(deviceSchema)
+    // It needs to be optional here because when a location is empty without any devices/sensors it returns an empty object, see https://github.com/GuiHash/homebridge-lacrosseview/issues/112
+    // To handle that we have to transform the undefined value to an empty array
+    .optional()
+    .transform(items => items || []),
 })
 
 const dataSchema = z.object({
