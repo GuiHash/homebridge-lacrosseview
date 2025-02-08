@@ -1,4 +1,6 @@
 name: Lint
+permissions:
+  contents: read
 
 on:
   # Trigger the workflow on push or pull request,
@@ -19,7 +21,7 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - uses: sibiraj-s/action-eslint@v3
+      - uses: sibiraj-s/action-eslint@b47d77a755aa115fa591770079695b70d7575601
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # optional
           eslint-args: '--ignore-pattern .gitignore --quiet --max-warnings 0'
