@@ -1,7 +1,7 @@
-import { type Service, type PlatformAccessory, type Logger } from 'homebridge'
-import LaCrosseAPI, { deviceSchema } from './lacrosse.js'
+import type { Service, PlatformAccessory, Logger } from 'homebridge'
+import { deviceSchema, type default as LaCrosseAPI } from './lacrosse.js'
 
-import { LaCrosseViewPlatform } from './platform.js'
+import type { LaCrosseViewPlatform } from './platform.js'
 
 /**
  * Platform Accessory
