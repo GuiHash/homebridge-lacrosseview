@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" height="200" />
+</p>
+
 # Homebridge La Crosse View
 
 [![npm](https://badgen.net/npm/v/homebridge-lacrosseview) ![npm](https://badgen.net/npm/dt/homebridge-lacrosseview)](https://www.npmjs.com/package/homebridge-lacrosseview)
@@ -82,7 +86,7 @@ Usually located in `/var/lib/homebridge` or `~/.homebridge`. To customise this o
 
 If you have a La Crosse View sensor that is not yet supported by this plugin you can help adding support for it by following these steps:
 
-1. Run homebridge in [debug mode](https://github.com/homebridge/homebridge/wiki/Basic-Troubleshooting#debug-mode) 
+1. Run homebridge in [debug mode](https://github.com/homebridge/homebridge/wiki/Basic-Troubleshooting#debug-mode)
 2. Create a [new issue](https://github.com/GuiHash/homebridge-lacrosseview/issues/new) and post your homebridge logs.
 
 ## Development
@@ -95,7 +99,6 @@ npm install
 
 npm run watch
 ```
-
 
 ## Acknowledgements
 
