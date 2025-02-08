@@ -1,5 +1,6 @@
 {
   "name": "homebridge-lacrosseview",
+  "homepage": "https://github.com/GuiHash/homebridge-lacrosseview/#readme",
   "displayName": "Homebridge La Crosse View",
   "version": "2.1.2",
   "type": "module",
