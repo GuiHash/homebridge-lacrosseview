@@ -1,3 +1,13 @@
+## [2.1.4](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.1.3...v2.1.4) (2025-02-15)
+
+### Bug Fixes
+
+* accessory instantiated multiple times ([#125](https://github.com/GuiHash/homebridge-lacrosseview/issues/125)) ([923fa54](https://github.com/GuiHash/homebridge-lacrosseview/commit/923fa54b2672b1ee72aff08aca984d587d4eabc6))
+
+### Documentations
+
+* update README.md ([bb8da03](https://github.com/GuiHash/homebridge-lacrosseview/commit/bb8da03fe8edcbac3b6b9d4d9dd0788ab2b2629a))
+
 ## [2.1.3](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.1.2...v2.1.3) (2025-02-08)
 
 ## [2.1.2](https://github.com/GuiHash/homebridge-lacrosseview/compare/v2.1.1...v2.1.2) (2025-02-07)
