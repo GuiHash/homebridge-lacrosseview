@@ -72,7 +72,6 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
   // this is used to track restored cached accessories
   public readonly accessories: Map<string, PlatformAccessoryWithContext> = new Map()
-  public readonly discoveredCacheUUIDs: string[] = []
 
   constructor(
     public readonly log: Logger,
@@ -93,7 +92,7 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     this.api.on('didFinishLaunching', () => {
       log.debug('didFinishLaunching')
       // run the method to discover / register your devices as accessories
-      this.discoverDevices()
+      this.discoverDevices(true)
       setInterval(() => {
         this.discoverDevices()
       }, DISCOVER_DEVICES_INTERVAL)
@@ -122,12 +121,12 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
     }
   }
 
-  async discoverDevices() {
+  async discoverDevices(initial?: boolean) {
     try {
       this.log.info('Discovering devices')
 
       const devices = await this.getDevices()
-
+      const discoveredCacheUUIDs: string[] = []
       // loop over the discovered devices and register each one if it has not already been registered
       for (const device of devices) {
         const uuid = this.api.hap.uuid.generate(device.id)
@@ -151,7 +150,9 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
           // create the accessory handler for the restored accessory
           // this is imported from `platformAccessory.ts`
-          new Accessory(this, existingAccessory)
+          if (initial) {
+            new Accessory(this, existingAccessory)
+          }
         } else {
           // the accessory does not yet exist, so we need to create it
           this.log.info('Adding new accessory: %s [id: %s] [uuid: %s]', device.name, device.id, uuid)
@@ -173,18 +174,19 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
         }
 
         // push into discoveredCacheUUIDs
-        this.discoveredCacheUUIDs.push(uuid)
+        discoveredCacheUUIDs.push(uuid)
       }
 
       for (const [uuid, accessory] of this.accessories) {
-        if (!this.discoveredCacheUUIDs.includes(uuid)) {
-          this.log.debug(
+        if (!discoveredCacheUUIDs.includes(uuid)) {
+          this.log.info(
             'Removing existing accessory: %s [id: %s] [uuid: %s]',
             accessory.displayName,
             accessory.context.device.id,
             accessory.UUID,
           )
           this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory])
+          this.accessories.delete(uuid)
         }
       }
     } catch (e) {
