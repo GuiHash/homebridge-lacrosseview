@@ -1,11 +1,11 @@
-name: Build
+name: Test
 permissions:
   contents: read
 
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,3 +26,6 @@ jobs:
 
       - name: Build the project
         run: npm run build
+
+      - name: Test the project
+        run: npm run test
