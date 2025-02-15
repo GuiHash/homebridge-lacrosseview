@@ -2,6 +2,16 @@ import { expect, test } from 'vitest'
 import LaCrosseAPI from './lacrosse.js'
 import { http, HttpResponse } from 'msw'
 
+/* eslint-disable no-console */
+const logger = {
+  info: () => console.info,
+  success: () => console.info,
+  warn: () => console.warn,
+  error: () => console.error,
+  debug: () => console.debug,
+}
+/* eslint-enable no-console */
+
 test('throw an error if invalid email', async () => {
   globalThis.httpServer?.use(
     http.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword', () => {
@@ -24,7 +34,7 @@ test('throw an error if invalid email', async () => {
     }),
   )
 
-  const lacrosse = new LaCrosseAPI('an-invalid-email@example.local', 'password')
+  const lacrosse = new LaCrosseAPI('an-invalid-email@example.local', 'password', logger)
 
   await expect(() => lacrosse.getLocations()).rejects.toThrowError(new Error('EMAIL_NOT_FOUND'))
 })
@@ -50,13 +60,13 @@ test('throw an error if invalid password', async () => {
       )
     }),
   )
-  const lacrosse = new LaCrosseAPI('an-email@example.local', 'invalid-password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'invalid-password', logger)
 
   await expect(() => lacrosse.getLocations()).rejects.toThrowError(new Error('INVALID_PASSWORD'))
 })
 
 test('get all locations', async () => {
-  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password', logger)
 
   await expect(lacrosse.getLocations()).resolves.toStrictEqual([
     {
@@ -73,7 +83,7 @@ test('get all locations', async () => {
 })
 
 test('get all devices', async () => {
-  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password', logger)
 
   await expect(lacrosse.getDevices()).resolves.toStrictEqual([
     {
@@ -159,7 +169,7 @@ test('get all devices', async () => {
 })
 
 test('get device status', async () => {
-  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password')
+  const lacrosse = new LaCrosseAPI('an-email@example.local', 'password', logger)
 
   await expect(lacrosse.getDeviceStatus('a-device-id')).resolves.toStrictEqual({
     barometricPressure: 1040,
