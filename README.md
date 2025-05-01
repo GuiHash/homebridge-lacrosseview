@@ -46,7 +46,8 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
   "devicesToExclude": ["id-device"],
   "locationsToExclude": ["id-location"],
   "pollingInterval": 200,
-  "fakeGatoEnabled": false
+  "fakeGatoEnabled": false,
+  "disablePollingLogs": false
 }]
 ```
 
@@ -58,6 +59,7 @@ It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebr
 - `locationsToExclude`: Location ids to exclude _(Default to `[]`)_
 - `fakeGatoEnabled`: If historical data should be reported to the Elgato Eve App _(Default to `false`)_
 - `fakeGatoStoragePath`: Custom path where to save fakegato history _(Default to homebridge user path)_
+- `disablePollingLogs`: Disable polling status logs in homebridge _(Default to `false`)_
 
 > You can find device / location ids in your homebridge logs in [debug mode](https://github.com/homebridge/homebridge/wiki/Basic-Troubleshooting#debug-mode)
 

@@ -29,6 +29,7 @@ interface LaCrosseViewConfig extends PlatformConfig {
   locationsToExclude: string[]
   fakeGatoEnabled: boolean
   fakeGatoStoragePath?: string
+  disablePollingLogs?: boolean
 }
 
 function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
@@ -53,6 +54,7 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
     locationsToExclude: config.locationsToExclude || [],
     fakeGatoEnabled: fakeGatoEnabled ? Boolean(fakeGatoEnabled) : false,
     fakeGatoStoragePath: fakeGatoStoragePath ? String(fakeGatoStoragePath) : undefined,
+    disablePollingLogs: config.disablePollingLogs ? Boolean(config.disablePollingLogs) : false,
   }
 }
 
@@ -123,7 +125,9 @@ export class LaCrosseViewPlatform implements DynamicPlatformPlugin {
 
   async discoverDevices(initial?: boolean) {
     try {
-      this.log.info('Discovering devices')
+      if (!this.config.disablePollingLogs) {
+        this.log.info('Discovering devices')
+      }
 
       const devices = await this.getDevices()
       const discoveredCacheUUIDs: string[] = []

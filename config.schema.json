@@ -61,6 +61,12 @@
         "title": "FakeGato Storage Path",
         "type": "string",
         "description": "Specify a custom path to save FakeGato history."
+      },
+      "disablePollingLogs": {
+        "title": "Disable Polling Logs",
+        "type": "boolean",
+        "default": false,
+        "description": "Disable polling status logs in homebridge."
       }
     }
   },
@@ -92,7 +98,8 @@
           "type": "array",
           "buttonText": "Add Location",
           "items": ["locationsToExclude[]"]
-        }
+        },
+        "disablePollingLogs"
       ]
     },
     {

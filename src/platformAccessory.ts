@@ -81,7 +81,9 @@ export class Accessory {
 
   async updateDataSensors() {
     try {
-      this.log.info(`[%s] lacrosse.getDeviceStatus("%s")`, this.accessory.displayName, this.accessory.context.device.id)
+      if (!this.platform.config.disablePollingLogs) {
+        this.log.info(`[%s] lacrosse.getDeviceStatus("%s")`, this.accessory.displayName, this.accessory.context.device.id)
+      }
 
       const { humidity, temperature, battery } = await this.lacrosse.getDeviceStatus(this.accessory.context.device.id)
 
