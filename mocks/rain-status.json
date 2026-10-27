@@ -1,0 +1,147 @@
+{
+  "time_zone": "Etc/UTC",
+  "status": {
+    "txn": "auto",
+    "in_app_low_battery_warnings": true,
+    "health": "healthy",
+    "channel": 1,
+    "battery_status": "charged",
+    "battery_level": 75
+  },
+  "last_update": 1793139142,
+  "data": {
+    "unbound": {
+      "Rain": {
+        "unit_enum": 641,
+        "unit": "millimeters",
+        "tally": {
+          "value": 46.482
+        }
+      }
+    },
+    "current": {
+      "Rain": {
+        "unit_enum": 641,
+        "unit": "millimeters",
+        "spot": {
+          "value": 0,
+          "time": 1793139142,
+          "attributes": {
+            "time": 1793139142,
+            "precipitation_level": 3,
+            "cycle": 0
+          }
+        },
+        "data_points": 1
+      }
+    },
+    "ai.minutes.15": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 0
+            }
+          }
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 0.762
+            },
+            "data_points": 3
+          }
+        }
+      }
+    },
+    "ai.minutes.30": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 0
+            }
+          }
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 1.524
+            },
+            "data_points": 3
+          }
+        }
+      }
+    },
+    "ai.hours.1": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 0
+            }
+          }
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 2.54
+            },
+            "data_points": 3
+          }
+        }
+      }
+    },
+    "ai.days.1": {
+      "pending": {
+        "state": "pending",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 0
+            }
+          }
+        }
+      },
+      "head": {
+        "state": "complete",
+        "fields": {
+          "Rain": {
+            "unit_enum": 641,
+            "unit": "millimeters",
+            "tally": {
+              "value": 14.478
+            },
+            "data_points": 3
+          }
+        }
+      }
+    }
+  }
+}

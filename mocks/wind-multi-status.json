@@ -1,0 +1,96 @@
+{
+  "time_zone": "Etc/UTC",
+  "status": {
+    "txn": "auto",
+    "in_app_low_battery_warnings": true,
+    "health": "healthy",
+    "channel": 1,
+    "battery_status": "charged",
+    "battery_level": 75
+  },
+  "last_update": 1793139162,
+  "data": {
+    "current": {
+      "WindSpeed": {
+        "unit_enum": 1154,
+        "unit": "kilometers_per_hour",
+        "spot": {
+          "value": 1.1,
+          "time": 1793139162,
+          "attributes": {
+            "wind_level": 0
+          }
+        },
+        "data_points": 1
+      },
+      "WindHeading": {
+        "unit_enum": 8194,
+        "unit": "degrees",
+        "spot": {
+          "value": 248,
+          "time": 1793139162,
+          "attributes": {
+            "wind_direction": 6
+          }
+        },
+        "data_points": 1
+      },
+      "WindChill": {
+        "unit_enum": 4098,
+        "unit": "degrees_fahrenheit",
+        "spot": {
+          "value": 50,
+          "time": 1793139162,
+          "attributes": {
+            "out_of_range": 1
+          }
+        },
+        "data_points": 1
+      },
+      "Temperature": {
+        "unit_enum": 4225,
+        "unit": "degrees_celsius",
+        "spot": {
+          "value": 10,
+          "time": 1793139162,
+          "attributes": {}
+        },
+        "data_points": 1
+      },
+      "Humidity": {
+        "unit_enum": 16513,
+        "unit": "relative_humidity",
+        "spot": {
+          "value": 92,
+          "time": 1793139162,
+          "attributes": {}
+        },
+        "data_points": 1
+      },
+      "HeatIndex": {
+        "unit_enum": 4098,
+        "unit": "degrees_fahrenheit",
+        "spot": {
+          "value": 50,
+          "time": 1793139162,
+          "attributes": {
+            "out_of_range": -1
+          }
+        },
+        "data_points": 1
+      },
+      "FeelsLike": {
+        "unit_enum": 4098,
+        "unit": "degrees_fahrenheit",
+        "spot": {
+          "value": 50,
+          "time": 1793139162,
+          "attributes": {
+            "out_of_range": 0
+          }
+        },
+        "data_points": 1
+      }
+    }
+  }
+}
