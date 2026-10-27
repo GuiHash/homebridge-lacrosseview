@@ -61,6 +61,95 @@
         "title": "FakeGato Storage Path",
         "type": "string",
         "description": "Specify a custom path to save FakeGato history."
+      },
+      "windSpeedUnit": {
+        "title": "Wind Speed Unit",
+        "type": "string",
+        "default": "kmh",
+        "oneOf": [
+          {
+            "title": "km/h",
+            "enum": ["kmh"]
+          },
+          {
+            "title": "mph",
+            "enum": ["mph"]
+          },
+          {
+            "title": "m/s",
+            "enum": ["ms"]
+          },
+          {
+            "title": "knots",
+            "enum": ["knots"]
+          }
+        ],
+        "description": "Unit used for the wind speed shown in HomeKit. HomeKit has no wind sensor type, so the speed appears as a light sensor reading (\"lux\")."
+      },
+      "windThreshold": {
+        "title": "Windy Threshold",
+        "type": "number",
+        "default": 0,
+        "minimum": 0,
+        "description": "When greater than 0, adds a \"Windy\" occupancy sensor that is triggered while the wind speed (in the unit above) is at or above this value. Useful for automations."
+      },
+      "rainAmountSensor": {
+        "title": "Expose Rain Amount",
+        "type": "boolean",
+        "default": false,
+        "description": "Also add a light sensor whose value (\"lux\") is the rain total for the period below."
+      },
+      "rainUnit": {
+        "title": "Rain Amount Unit",
+        "type": "string",
+        "default": "mm",
+        "oneOf": [
+          {
+            "title": "Millimeters",
+            "enum": ["mm"]
+          },
+          {
+            "title": "Inches",
+            "enum": ["in"]
+          }
+        ],
+        "description": "Unit used for the rain amount light sensor."
+      },
+      "rainWindowMinutes": {
+        "title": "Raining Window",
+        "type": "integer",
+        "default": 30,
+        "oneOf": [
+          {
+            "title": "Last 15 minutes",
+            "enum": [15]
+          },
+          {
+            "title": "Last 30 minutes",
+            "enum": [30]
+          },
+          {
+            "title": "Last hour",
+            "enum": [60]
+          }
+        ],
+        "description": "A \"Raining\" occupancy sensor is added for each rain sensor. It is detected while any rain was recorded in this rolling window."
+      },
+      "rainAmountPeriod": {
+        "title": "Rain Amount Period",
+        "type": "string",
+        "default": "day",
+        "oneOf": [
+          {
+            "title": "Last 24 hours",
+            "enum": ["day"]
+          },
+          {
+            "title": "Last hour",
+            "enum": ["hour"]
+          }
+        ],
+        "description": "Rolling period for the rain amount light sensor."
       }
     }
   },
@@ -94,6 +183,22 @@
           "items": ["locationsToExclude[]"]
         }
       ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Wind Sensors",
+      "description": "How wind speed sensors are exposed to HomeKit",
+      "expandable": true,
+      "expanded": false,
+      "items": ["windSpeedUnit", "windThreshold"]
+    },
+    {
+      "type": "fieldset",
+      "title": "Rain Sensors",
+      "description": "How rain sensors are exposed to HomeKit",
+      "expandable": true,
+      "expanded": false,
+      "items": ["rainWindowMinutes", "rainAmountSensor", "rainAmountPeriod", "rainUnit"]
     },
     {
       "type": "fieldset",

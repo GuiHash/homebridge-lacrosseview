@@ -69,6 +69,8 @@ export const deviceSchema = z
             Humidity: z.number().optional(),
             HeatIndex: z.number().optional(),
             BarometricPressure: z.number().optional(),
+            WindSpeed: z.number().optional(),
+            Rain: z.number().optional(),
           })
           .passthrough()
           .optional(),
@@ -93,7 +95,9 @@ const devicesSchema = z.object({
 
 const dataSchema = z.object({
   unit_enum: z.number(),
-  unit: z.enum(['degrees_celsius', 'degrees_fahrenheit', 'relative_humidity', 'millibars']),
+  // Known units are listed for documentation; any other string is accepted so that new sensor
+  // types (e.g. wind speed) don't make the whole status payload fail validation.
+  unit: z.enum(['degrees_celsius', 'degrees_fahrenheit', 'relative_humidity', 'millibars']).or(z.string()),
   spot: z.object({
     value: z.number(),
     time: z.number(),
@@ -102,14 +106,42 @@ const dataSchema = z.object({
   data_points: z.number(),
 })
 
+// Rolling-window aggregates: `head` covers the window ending at the latest reading
+// (e.g. `ai.minutes.30` head = the last 30 minutes), and `tally` is the total rain in it.
+const rainAggregateSchema = z
+  .object({
+    head: z
+      .object({
+        fields: z
+          .object({
+            Rain: z
+              .object({
+                unit_enum: z.number().optional(),
+                unit: z.string(),
+                tally: z.object({ value: z.number() }).passthrough(),
+              })
+              .passthrough()
+              .optional(),
+          })
+          .passthrough(),
+      })
+      .passthrough()
+      .optional(),
+  })
+  .passthrough()
+  .optional()
+  .catch(undefined)
+
 const deviceStatusSchema = z
   .object({
     time_zone: z.string(),
-    status: z.object({
-      health: z.string(),
-      battery_status: z.enum(['low', 'charged']).or(z.string()),
-      battery_level: z.number(),
-    }),
+    status: z
+      .object({
+        health: z.string().optional(),
+        battery_status: z.enum(['low', 'charged']).or(z.string()).optional(),
+        battery_level: z.number().optional(),
+      })
+      .passthrough(),
     last_update: z.number(),
     data: z.object({
       current: z.object({
@@ -117,7 +149,14 @@ const deviceStatusSchema = z
         Humidity: dataSchema.optional(),
         HeatIndex: dataSchema.optional(),
         BarometricPressure: dataSchema.optional(),
+        WindSpeed: dataSchema.optional(),
+        // A malformed rain reading shouldn't take down the rest of the status payload.
+        Rain: dataSchema.optional().catch(undefined),
       }),
+      'ai.minutes.15': rainAggregateSchema,
+      'ai.minutes.30': rainAggregateSchema,
+      'ai.hours.1': rainAggregateSchema,
+      'ai.days.1': rainAggregateSchema,
     }),
   })
   .passthrough()
@@ -157,10 +196,12 @@ async function getToken(email: string, password: string) {
 }
 
 type Temperature = z.infer<typeof deviceStatusSchema>['data']['current']['Temperature']
+type Measurement = z.infer<typeof dataSchema>
 
 export default class LaCrosseAPI {
   private client: Got
   private log: Logger
+  private warnedUnits = new Set<string>()
 
   constructor(email: string, password: string, log: Logger) {
     this.log = log
@@ -246,9 +287,96 @@ export default class LaCrosseAPI {
       humidity: data.Humidity?.spot.value,
       heatIndex: convertToCelcius(data.HeatIndex)?.spot.value,
       barometricPressure: data.BarometricPressure?.spot.value,
+      windSpeed: this.convertToKmh(data.WindSpeed)?.spot.value,
+      rain: this.convertToMm(data.Rain)?.spot.value,
+      rainLast15Minutes: this.rainTally(response.data['ai.minutes.15']),
+      rainLast30Minutes: this.rainTally(response.data['ai.minutes.30']),
+      rainLastHour: this.rainTally(response.data['ai.hours.1']),
+      rainLast24Hours: this.rainTally(response.data['ai.days.1']),
       battery: response.status.battery_level,
     }
   }
+
+  /**
+   * Normalizes a wind speed reading to km/h.
+   * Unknown units are logged once and passed through unchanged (assumed km/h).
+   */
+  private convertToKmh(windSpeed?: Measurement) {
+    return this.convertUnit(windSpeed, WIND_SPEED_TO_KMH, 'wind speed', 'km/h')
+  }
+
+  /**
+   * Normalizes a rain reading to millimeters.
+   * Unknown units are logged once and passed through unchanged (assumed mm).
+   */
+  private convertToMm(rain?: Measurement) {
+    return this.convertUnit(rain, RAIN_TO_MM, 'rain', 'mm')
+  }
+
+  /** Total rain (mm) in an aggregate's rolling window, or undefined if the API didn't provide it. */
+  private rainTally(aggregate: z.infer<typeof rainAggregateSchema>) {
+    const rain = aggregate?.head?.fields.Rain
+    if (!rain) return undefined
+    return this.toUnit(rain.tally.value, rain.unit, rain.unit_enum, RAIN_TO_MM, 'rain', 'mm')
+  }
+
+  private convertUnit(
+    measurement: Measurement | undefined,
+    factors: Record<string, number>,
+    label: string,
+    assumedUnit: string,
+  ) {
+    if (!measurement) return measurement
+    measurement.spot.value = this.toUnit(
+      measurement.spot.value,
+      measurement.unit,
+      measurement.unit_enum,
+      factors,
+      label,
+      assumedUnit,
+    )
+    return measurement
+  }
+
+  private toUnit(
+    value: number,
+    unit: string,
+    unitEnum: number | undefined,
+    factors: Record<string, number>,
+    label: string,
+    assumedUnit: string,
+  ) {
+    const factor = factors[unit]
+    if (factor === undefined) {
+      if (!this.warnedUnits.has(unit)) {
+        this.warnedUnits.add(unit)
+        this.log.warn(
+          'Unknown %s unit [%s] (unit_enum %s), assuming %s. Please report this on GitHub.',
+          label,
+          unit,
+          unitEnum,
+          assumedUnit,
+        )
+      }
+      return value
+    }
+    return value * factor
+  }
+}
+
+const RAIN_TO_MM: Record<string, number> = {
+  millimeters: 1,
+  millimetres: 1,
+  inches: 25.4,
+}
+
+const WIND_SPEED_TO_KMH: Record<string, number> = {
+  kilometers_per_hour: 1,
+  kilometres_per_hour: 1,
+  miles_per_hour: 1.609344,
+  meters_per_second: 3.6,
+  metres_per_second: 3.6,
+  knots: 1.852,
 }
 
 function convertToCelcius(temperature?: Temperature) {

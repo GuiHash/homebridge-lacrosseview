@@ -14,6 +14,10 @@ import {
   Accessory,
   isCompatibleDevice,
   type PlatformAccessoryWithContext,
+  type WindSpeedUnit,
+  type RainUnit,
+  type RainWindowMinutes,
+  type RainAmountPeriod,
   assertPlatformAccessory,
 } from './platformAccessory.js'
 
@@ -29,7 +33,15 @@ interface LaCrosseViewConfig extends PlatformConfig {
   locationsToExclude: string[]
   fakeGatoEnabled: boolean
   fakeGatoStoragePath?: string
+  windSpeedUnit: WindSpeedUnit
+  windThreshold: number
+  rainUnit: RainUnit
+  rainAmountSensor: boolean
+  rainWindowMinutes: RainWindowMinutes
+  rainAmountPeriod: RainAmountPeriod
 }
+
+const WIND_SPEED_UNITS: WindSpeedUnit[] = ['kmh', 'mph', 'ms', 'knots']
 
 function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
   const password = config.password
@@ -43,6 +55,21 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
   if (config.pollingInterval && typeof config.pollingInterval !== 'number') {
     throw new Error('pollingInterval must be a number in your config.json')
   }
+  if (config.windSpeedUnit && !WIND_SPEED_UNITS.includes(config.windSpeedUnit)) {
+    throw new Error(`windSpeedUnit must be one of ${WIND_SPEED_UNITS.join(', ')} in your config.json`)
+  }
+  if (config.rainUnit && !['mm', 'in'].includes(config.rainUnit)) {
+    throw new Error('rainUnit must be one of mm, in in your config.json')
+  }
+  if (config.rainWindowMinutes !== undefined && ![15, 30, 60].includes(config.rainWindowMinutes)) {
+    throw new Error('rainWindowMinutes must be one of 15, 30, 60 in your config.json')
+  }
+  if (config.rainAmountPeriod && !['hour', 'day'].includes(config.rainAmountPeriod)) {
+    throw new Error('rainAmountPeriod must be one of hour, day in your config.json')
+  }
+  if (config.windThreshold && typeof config.windThreshold !== 'number') {
+    throw new Error('windThreshold must be a number in your config.json')
+  }
 
   return {
     ...config,
@@ -53,6 +80,12 @@ function generateConfig(config: PlatformConfig): LaCrosseViewConfig {
     locationsToExclude: config.locationsToExclude || [],
     fakeGatoEnabled: fakeGatoEnabled ? Boolean(fakeGatoEnabled) : false,
     fakeGatoStoragePath: fakeGatoStoragePath ? String(fakeGatoStoragePath) : undefined,
+    windSpeedUnit: config.windSpeedUnit || 'kmh',
+    windThreshold: config.windThreshold || 0,
+    rainUnit: config.rainUnit || 'mm',
+    rainAmountSensor: Boolean(config.rainAmountSensor),
+    rainWindowMinutes: config.rainWindowMinutes ?? 30,
+    rainAmountPeriod: config.rainAmountPeriod || 'day',
   }
 }
 
